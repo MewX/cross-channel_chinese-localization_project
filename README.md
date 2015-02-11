@@ -1,2 +1,5 @@
 # cross-channel_chinesizing_project
-"Cross+Channel" Chinesizing Project, sources codes and website.
+
+**ON BUILDING...**
+
+This is website branch, now it redirects to our ( an unofficial & nonprofit chinesizing group ) official blog.
