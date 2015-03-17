@@ -18,20 +18,22 @@
     -10. Plus - Extract all chapter titles.<br/>
     -11. Plus - Put back all chapter titles.<br/>
     -12. Plus - Generate text package
-**********
-- Tools Choice List:
-    1. Create a folder.
-    2. Get file list in a folder.
-    3. Get file list and its size in a folder.
-    4. Convert a specific encode to Unicode.
-    5. Convert Unicode to a specific encode.
-    6. Convert a specific encode to Unicode-big.
-    7. Convert Unicode-big to a specific encode.
-    8. Convert a specific encode to UTF-8.
-    9. Convert UTF-8 to a specific encode.
-    10. Convert a specific encode to UTF-16.
-    11. Convert UTF-16 to a specific encode.
-**********
+
+>**********
+- Tools Choice List:<br/>
+    +1. Create a folder.<br/>
+    +2. Get file list in a folder.<br/>
+    +3. Get file list and its size in a folder.<br/>
+    +4. Convert a specific encode to Unicode.<br/>
+    +5. Convert Unicode to a specific encode.<br/>
+    +6. Convert a specific encode to Unicode-big.<br/>
+    +7. Convert Unicode-big to a specific encode.<br/>
+    +8. Convert a specific encode to UTF-8.<br/>
+    +9. Convert UTF-8 to a specific encode.<br/>
+    +10. Convert a specific encode to UTF-16.<br/>
+    +11. Convert UTF-16 to a specific encode.
+
+>**********
 
 ## 工具包功能介绍
 
@@ -134,43 +136,43 @@
 
 **********
 
-### 1 选项
+### +1 选项
 
 创建文件夹函数。
 
-### 2 选项
+### +2 选项
 
 获取文件夹中的文件列表。
 
-### 3 选项
+### +3 选项
 
 获取文件夹中的文件列表，含文件大小。
 
-### 4 选项
+### +4 选项
 
 将指定编码的文件转换成Unicode-LE。（未完成）
 
-### 5 选项
+### +5 选项
 
 4选项的逆操作。（未完成）
 
-### 6 选项
+### +6 选项
 
 将指定编码的文件转换成Unicode-BE。（未完成）
 
-### 7 选项
+### +7 选项
 
 6选项的逆操作。（未完成）
 
-### 8 选项
+### +8 选项
 
 将指定编码的文件转换成UTF-8。（未完成）
 
-### 9 选项
+### +9 选项
 
 8选项的逆操作。（未完成）
 
-### 10、11 选项
+### +10、+11 选项
 
 未完成的搞笑选项。（未完成）
 
