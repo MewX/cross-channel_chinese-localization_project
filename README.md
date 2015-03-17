@@ -2,7 +2,7 @@
 这里是 CROSS†CHANNEL 中文化（汉化）项目的**[网站](http://crosschannel.cn/)和程序源代码**。
 
 目前我们完成的是“CROSS†CHANNEL 复刻版”的汉化工作，
-**2016年我们的任务是“CROSS†CHANNEL -Final Complete”**。
+**2016年我们的任务是“CROSS†CHANNEL -Final Complete-”**。
 
 ## 汉化人员 STAFF
 
@@ -14,7 +14,7 @@
 > **都督&程序：**MewX<br/>
 > **最终校对：**牙刷<br/>
 > **全文校对：**烬、牙刷<br/>
-> **全文翻译：**白崎穣、Eruption、Haven、黑须太2、刘阿斗、荔枝蝉、旅之灵夫2、
+> **全文翻译：**白崎穣、坂田铜时、Eruption、Haven、黑须太2、刘阿斗、荔枝蝉、旅之灵夫2、
 > MarieL、姆Q的酱油瓶、秋田大学萝莉同好会会员甲、ScorpioAres、网特很多要HX、雅米多<br/>
 > **图片编辑：**Revo<br/>
 > **ＥＤ翻译：**kuon、牙刷、月山冥<br/>
