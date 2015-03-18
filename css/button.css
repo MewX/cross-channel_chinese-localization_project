@@ -1,0 +1,51 @@
+.navbtn {
+  position: relative;
+  width: 160px;
+  height: 80px;
+  line-height: 80px;
+  margin: 10px;
+  
+  background-color: #fff;
+  color: #73B9FF;
+  text-align:center;
+  font-family: "Microsoft YaHei", "微软雅黑", "simhei", "黑体";
+  font-size: 24px;
+  
+  float: left;
+  cursor: pointer;
+  
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
+  transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+}
+
+.navbtn:hover {
+  background-color: #73B9FF;
+  color: #fff;
+}
+
+.navbtn-sel {
+  position: relative;
+  width: 160px;
+  height: 80px;
+  line-height: 80px;
+  margin: 10px;
+  
+  background-color: #73B9FF;
+  color: #fff;
+  text-align:center;
+  font-family: "Microsoft YaHei", "微软雅黑", "simhei", "黑体";
+  font-size: 24px;
+  
+  float: left;
+  cursor: default;
+  
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}

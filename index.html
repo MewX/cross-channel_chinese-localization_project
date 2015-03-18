@@ -10,6 +10,7 @@
     <meta name="msvalidate.01" content="C66B37506EFE56B15FECD7A1E4FCE0E1" />
     
     <title>CROSS†CHANNEL中文化项目 - 群青学园放送部·群Ｘ会</title>
+    <link rel="stylesheet" type="text/css" href="css/button.css"/>
     <script language="javascript" type="text/javascript">
         // cancel automatic jump
         // setTimeout("window.location = 'http://crosschannel.blog.163.com/';", 12000);
@@ -22,12 +23,28 @@
     
     <script src="./js/css_browser_selector.js" type="text/javascript"></script>
     <style>
+		html {
+			overflow: scroll;
+		}
+		
        .gecko #Stage_flare_repeat { visibility:hidden; }
        .gecko.win #Stage_flare_repeat, .gecko.mac #Stage_flare_repeat { visibility:visible; }
     </style>
 </head>
 
 <body style="margin: 0px; padding: 0px; overflow: hidden; border: none; font-size: 0px;" scroll="no">
-	<a href="http://crosschannel.blog.163.com/" title="点击鼠标可以跳转到 -> 发布站博客~" target="_self"><div id="Stage" class="top-motion" style="left: 50%; margin-left: -480px;">Loading...</div></a>
+	<div id="navigator" style="position:relative;left:50%;margin-left:-480px;width:960px;height:100px;">
+    	<div class="navbtn-sel">主页</div>
+    	<div class="navbtn">关于</div>
+    	<div class="navbtn">下载</div>
+    	<div class="navbtn">源码</div>
+        <a href="http://crosschannel.blog.163.com/" title="点击跳转到发布站博客" target="_self">
+        	<div class="navbtn">博客</div>
+        </a>
+    </div>
+    <div id="divider" style="position:relative;left:50%;margin-left:-480px;width:960px;height:5px;background-color:#999"></div>
+	<div id="Stage" class="top-motion" style="left:50%;margin-left:-480px;">
+        Loading...
+    </div>
 </body>
 </html>
