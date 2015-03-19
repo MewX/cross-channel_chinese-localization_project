@@ -181,7 +181,8 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 
 				// need log
 			}
-			   
+			
+			// read current showing text
 	 		memset( temp, 0, sizeof( temp ) );
 			b = ReadProcessMemory(
 				ph,             
@@ -273,7 +274,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 					SetActiveWindow(hWnd);
 					// set Font style
 
-					HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, UNICODE,
+					HANDLE hFont = CreateFontW(20, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, UNICODE,
 						OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"MS PGothic");
 					SendMessageW(GetDlgItem(hTextDlg, IDC_STATICTEXT), WM_SETFONT, WPARAM(hFont), TRUE);
 					// GetDlgItem( hDlg, IDC_DLG_LOGIN_EDIT_USERNAME )
@@ -316,10 +317,25 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 					while (GetAsyncKeyState('1') < 0)
 						Sleep(50);
 
+					// get latest index position
+					unsigned long latestIndex = 0;
+					memset(temp, 0, sizeof(temp));
+					b = ReadProcessMemory(
+						ph,
+						(void*)0x6DB530, // latest index address
+						temp,
+						256,
+						NULL);
+					if (b)
+						latestIndex = *(unsigned long *)temp; // get it
+					else
+						latestIndex = 512; // found value is 256, but it can be a little larger
+
 					// load all history texts
-					wstring result;
+					wstring result, resultBeg, resultEnd;
 					const unsigned long posdelta = 0x1290;
 					unsigned long pos = 0x6DC6D0;
+					unsigned int index = 0;
 					while (1) {
 						memset(temp, 0, sizeof(temp));
 						b = ReadProcessMemory(
@@ -344,14 +360,18 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 
 							const char *fetchResult = 0;
 							int r = tf.find(temp, &fetchResult);
-							result  += r == FDR_W_NXL ? NotFound + StringToWstring(936, temp) : StringToWstring(932, fetchResult) + L"\r\n\r\n";
+							if (index++ < latestIndex)
+								resultBeg += r == FDR_W_NXL ? NotFound + StringToWstring(936, temp) : StringToWstring(932, fetchResult) + L"\r\n\r\n";
+							else
+								resultEnd += r == FDR_W_NXL ? NotFound + StringToWstring(936, temp) : StringToWstring(932, fetchResult) + L"\r\n\r\n";
 
 #ifdef LOG_ON
-							log << "History Request:" << lpBuffer << endl;
+							log << "History Request:" << temp << endl;
 #endif
 						}
 						else break;
 					}
+					result = resultEnd + resultBeg;
 
 					// set text
 					SetWindowTextW(GetDlgItem(hHistoryDlg, IDC_EDITHISTORY), result.c_str());
@@ -425,7 +445,9 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 		}
 
 		// GC
+#ifdef LOG_ON
 		log.close();
+#endif
 		delete[] buff;
 	}
 	else { // Work as uninstaller
@@ -438,15 +460,13 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 			WinExec( "cmd /c del Chip_S.chs", SW_HIDE );
 			WinExec( "cmd /c del Chip_T.chs", SW_HIDE );
 			WinExec( "cmd /c del RegFile.chs", SW_HIDE );
-			WinExec( "cmd /c del CROSSCHANNEL_alpha20150308.exe", SW_HIDE );
+			WinExec( "cmd /c del CROSSCHANNEL_v0.99.exe", SW_HIDE );
 #endif
 
-			MessageBoxW( NULL, L"卸载完毕，很干净的哦！~ 我们会想你的~~\r\n再来光顾一下http://crosschannel.cn吧~~", L"卸载完毕", MB_OK );
+			MessageBoxW( NULL, L"卸载完毕，很干净的哦！~ 我们会想你的~~\r\n再来光顾一下http://crosschannel.cn吧~~\r\n哦对了，如果这个卸载程序没有自删除还请手动删除一下~", L"卸载完毕", MB_OK );
 			ShellExecuteA(NULL, "open", "http://www.crosschannel.cn", NULL, NULL, SW_SHOWNORMAL);
 
 			// Delete self
-
-			// del
 			char    buf[MAX_PATH];
 			HMODULE module;
 
@@ -614,7 +634,7 @@ LRESULT CALLBACK HistoryProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	case WM_LBUTTONDOWN:
 		SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
 		break;
-		/*
+		/*// This will cause refresh shadows, I didn't process with this problem
 	case WM_CTLCOLORSTATIC:
 		// Set Text Color, and its background
 		hdc = (HDC)wParam;
