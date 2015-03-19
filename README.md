@@ -1,5 +1,3 @@
-# cross-channel_chinesizing_project
+# CROSS†CHANNEL 中文化（汉化）项目
 
-**ON BUILDING...**
-
-This is website branch, now it redirects to our ( an unofficial & nonprofit chinesizing group ) official blog.
+这里是 CROSS†CHANNEL 中文化（汉化）项目的网站源代码。
