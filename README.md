@@ -40,6 +40,44 @@
 > **很多来应募却没有成功的，感谢你们的尝试和支持！**<br/>
 > **广大吧友、坛友，感谢你们帮我们顶招募贴，帮我们宣传！**
 
+#### 该版补丁制作流程
+
+> 首先是文件包结构，均采用某商业单文件打包器打包。
+
+> **CROSSCHANNEL_v0.99.exe**
+- imgs/
+  - CROSS+CHANNEL.jpg
+  - pb_basic.png
+  - pb01_m.png
+  - pb02_m.png
+  - pb03_m.png
+  - pb04_m.png
+  - pb05_m.png
+  - pb06_m.png
+  - pb07_m.png
+  - pb08_m.png
+  - white.jpg
+- patch_files/
+  - Chip_E_arc/
+    - EFCCA0030.PNG
+  - Chip_S_arc/
+    - SGCC0003_PNG.png
+    - SGCC0011_PNG.png
+  - Chip_T_arc/
+    - T1.MSK
+    - T1_PNG.png
+- Chip+.chs
+- main.exe
+- ED.dat
+- highgui210.dll
+- patchchs.dll
+- Rio+.chs
+- size_list.lst
+
+> **UninstallChs.exe**
+- textpack.bin
+- main.exe
+
 ## 开源内容介绍
 
 这里是每个小项目的**简要介绍**，具体的内容见每个文件夹内的README.md介绍。
@@ -86,6 +124,10 @@
   但同时这个工具如果传入了"-m"参数，则可以当作Monitor执行，提供按键监控功能。
 在我们2015-03的汉化版本中，**添加了按下"\`/~"同步显示原文、按下"1/!"显示历史（非同步）功能**，
 实际上就是通过PatchChs.dll启动的时候同时启动"UninstallChs.exe -m"来实现的。
+
+### PatchFiles @master
+
+部分与无关紧要的汉化补丁资源文件内容。
 
 ### Others @master
 
