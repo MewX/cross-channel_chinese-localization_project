@@ -49,3 +49,15 @@
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
+
+.content {
+  position:relative;
+  line-height: 30px;
+  padding: 20px;
+
+  background-color: #73B9FF;
+  color: #fff;
+  text-align:left;
+  font-family: "Microsoft YaHei", "微软雅黑", "simhei", "黑体";
+  font-size: 24px;
+}
