@@ -25,7 +25,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+#include "textFinder.h"
 #pragma comment(lib, "WINMM.LIB")
+
+using namespace std;
 
 #include "E:\\libs\\OpenCV-2.1.0\\include\\opencv\\cv.h"
 #include "E:\\libs\\OpenCV-2.1.0\\include\\opencv\\cxcore.h"

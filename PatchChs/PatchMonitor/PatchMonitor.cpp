@@ -61,7 +61,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 		// change title
 		hWnd = FindWindowA( NULL, "zhCROSS+CHANNEL" );
  		if( hWnd == NULL ) { Sleep( 400 ); goto ORI; } // 找不到主窗口就一直循环，找到后继续执行
- 		SetWindowTextW( hWnd, L"CROSS\u2020CHANNEL 内部测试β版 20150317" ); // CROSS\u2020CHANNEL 正式汉化版 v0.99 （附加功能挂载成功）
+ 		SetWindowTextW( hWnd, L"CROSS\u2020CHANNEL 正式汉化版 v0.992 （附加功能挂载成功）" ); // CROSS\u2020CHANNEL 正式汉化版 v0.99 （附加功能挂载成功）
 		hParent = hWnd;
  	
 		// 侵入进程
@@ -226,8 +226,8 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 #endif
 			}
 
-	 		// Read Content (`)VK_OEM_3
-			if (GetAsyncKeyState(VK_OEM_3) < 0) {
+	 		// Read Content (`)VK_OEM_3, and game window is on the top
+			if (GetAsyncKeyState(VK_OEM_3) < 0 && GetForegroundWindow() == hWnd) {
 				if (hHistoryDlg != NULL) {
 					hHistoryDlg = NULL;
 					TerminateThread(hHistoryThread, 0);
@@ -294,8 +294,8 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 				
 			}
 
-			// Show History window
-			if (GetAsyncKeyState('1') < 0) {
+			// Show History window, and game window is on the top
+			if (GetAsyncKeyState('1') < 0 && GetForegroundWindow() == hWnd) {
 				// close text dialog
 				if (hTextDlg != NULL) {
 					hTextDlg = NULL;
@@ -459,8 +459,9 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 			WinExec( "cmd /c del Chip_E.chs", SW_HIDE );
 			WinExec( "cmd /c del Chip_S.chs", SW_HIDE );
 			WinExec( "cmd /c del Chip_T.chs", SW_HIDE );
-			WinExec( "cmd /c del RegFile.chs", SW_HIDE );
-			WinExec( "cmd /c del CROSSCHANNEL_v0.99.exe", SW_HIDE );
+			WinExec( "cmd /c del RegFile.chs", SW_HIDE);
+			WinExec( "cmd /c del textpack.bin", SW_HIDE);
+			WinExec( "cmd /c del CROSSCHANNEL_v0.992.exe", SW_HIDE );
 #endif
 
 			MessageBoxW( NULL, L"卸载完毕，很干净的哦！~ 我们会想你的~~\r\n再来光顾一下http://crosschannel.cn吧~~\r\n哦对了，如果这个卸载程序没有自删除还请手动删除一下~", L"卸载完毕", MB_OK );
