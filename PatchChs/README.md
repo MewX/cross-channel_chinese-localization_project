@@ -20,9 +20,9 @@
 
 作用是模拟注册表读写，以及启动汉化补丁扩展功能。
 
-## PatchChs
+## PatchChsRework
 
-没有使用git时的PatchChs的一个分支。内含cl.exe编译脚本。**（废弃）**
+没有使用git时的PatchChs的一个分支，仅用cl.exe编译，内含编译脚本。**（已废弃）**
 
 ## PatchMonitor
 
