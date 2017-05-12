@@ -1,0 +1,271 @@
+label ccc0031b:
+    play bgm "bgm/bgm002.ogg"
+    call gl(0,"bgcc0006")
+    call vsp(0,1)
+    call vsp(1,0)
+    with wipeleft
+    "美希と霧がいた。"
+    太一 "「……食い物ありませんか？」"
+    call gl(1,"TCYM0000|TCYM0000")
+    call gp(1,t=center)#x=180
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki000"
+    美希 "「残念ながら」"
+    太一 "「その弁当……？」"
+    "ライス。"
+    "ミートボール。"
+    太一 "「お、おい、なぜそのようなものが……？」"
+    call gl(1,"TCYM0003|TCYM0003")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki001"
+    美希 "「霧ちんが作ったのですよ。飯ごうとかで」"
+    太一 "「うわ、いいなあ」"
+    call gl(2,"TCSK0002|TCSK000x")
+    call vsp(2,1)
+    call gp(1,t=left)#x=40
+    call gp(2,t=right)#x=345
+    with Dissolve(500.0/1000.0)
+    voice "vfCCC0031bkri000"
+    霧 "「……先輩の分はありません」"
+    "きっぱり。"
+    太一 "「かなり分量があるじゃないか」"
+    call gl(1,"TCYM0000|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki002"
+    美希 "「多いですよね」"
+    "明らかに三人分はありそうだ。"
+    voice "vfCCC0031bkri001"
+    霧 "「しかしなぜか先輩のはないんです」"
+    太一 "「……むぅ」"
+    "イノセンスが唸る。"
+    太一 "「じゃー物々交換しよう」"
+    call gl(1,"TCYM0003|TCYM0003")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki003"
+    美希 "「トレードですな」"
+    太一 "「あめ玉とグミキャンディー。手作り」"
+    "二人の目の色が変わった。"
+    call gl(1,"TCYM0001|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki004"
+    美希 "「てづくり？」"
+    太一 "「んー。曜子ちゃんがだけど」"
+    太一 "「シュガー控えめ、美容健康にいいらしい。グミはこんにゃくだね。０カロリー」"
+    call gl(1,"TCYM0004|TCYM0002")
+    call gl(2,"TCSK0000|TCSK000x")
+    call vsp(1,1)
+    with dissolve
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bgoo000"
+    二人 "「０カロリー！？」"
+    call vsp(1,0)
+    call vsp(2,0)
+    with Dissolve(500.0/1000.0)
+    "……………………。"
+    太一 "「わーい」"
+    "交換成立。"
+    call gl(1,"TCYM0003|TCYM0003")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki006"
+    美希 "「ママの味がする……」"
+    call gl(2,"TCSK0006|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri003"
+    霧 "「するね」"
+    voice "vfCCC0031bmki007"
+    美希 "「ミルクだね」"
+    voice "vfCCC0031bkri004"
+    霧 "「だねー」"
+    太一 "「ストーカーの味だけどね」"
+    voice "vfCCC0031bmki008"
+    美希 "「ほっぺが……わらひのほっぺが……」"
+    voice "vfCCC0031bkri005"
+    霧 "「ん～～～っ」"
+    "女の子だなあ。"
+    "おかげでライスにありつけた。"
+    "やっぱ日本人だから。"
+    太一 "「うまい……霧ちんは料理の才能がある」"
+    call gl(2,"TCSK0000|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri006"
+    霧 "「……おかずはレトルトなんで」"
+    太一 "「でもうまい」"
+    call gl(2,"TCSK0002|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri007"
+    霧 "「作らないと、美希がいつまでもお菓子を」"
+    call gl(1,"TCYM0001|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki009"
+    美希 "「お菓子好きだもん」"
+    太一 "「お互い食事には苦労しているようだな」"
+    call gl(1,"TCYM0000|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki010"
+    美希 "「ええ……」"
+    太一 "「霧ちん結婚しよう」"
+    call gl(2,"TCSK0002|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri008"
+    霧 "「不可能です」"
+    call gl(1,"TCYM0000|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki011"
+    美希 "「いやです、じゃなくて不可能らしいですよ、先輩」"
+    太一 "「……燃えてきた」"
+    call gl(2,"TCSK0001|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri009"
+    霧 "「水かけますよ？」"
+    太一 "「またか」"
+    call gl(1,"TCYM0000|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki012"
+    美希 "「お菓子はもっとあるのですか？」"
+    太一 "「あるよ。ビスケットとか、サブレとか。曜子先生はお菓子作るの得意だから」"
+    call gl(1,"TCYM0021|TCYM0021")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki013"
+    美希 "「へー、意外」"
+    太一 "「いい保存食になるらしい」"
+    call gl(2,"TCSK0000|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri010"
+    霧 "「……恋人、なんですよね？」"
+    太一 "「え、俺と曜子ちゃんが？」"
+    call gl(1,"TCYM0000|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki014"
+    美希 "「それは美希も気になりすぎてました」"
+    voice "vfCCC0031bmki015"
+    美希 "「食事も手につきません」"
+    太一 "「……ほっぺたパンパンじゃねぇか」"
+    voice "vfCCC0031bmki016"
+    美希 "「むぐ」"
+    "真夏の食い溜め娘が。"
+    太一 "「いや、一緒に暮らしてただけだよ」"
+    call gl(1,"TCYM0001|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki017"
+    美希 "「同棲」"
+    call gl(2,"TCSK0000|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri011"
+    霧 "「同棲」"
+    "二人はハモった。"
+    太一 "「違う。同棲とは違う」"
+    太一 "「ええと、要するに俺たちは親がいないから、二人とも睦美さんに養ってもらってたんだよ。あ、これは俺の保護者ね」"
+    太一 "「姉弟みたいなものと言えばいえるけど……俺はそう思ってない」"
+    "向こうもそう思ってないし。"
+    "だから追い出されたし、曜子ちゃん。"
+    call gl(1,"TCYM0000|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki018"
+    美希 "「へー、初耳」"
+    call gl(2,"TCSK0002|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri012"
+    霧 "「……あやしい関係だと思っていたのに……」"
+    "いや、実際あやしいです。"
+    太一 "「まー、そこはホレ。血縁ではないし」"
+    call gl(1,"TCYM0021|TCYM0021")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki019"
+    美希 "「支倉先輩も謎が多い人ですよね」"
+    太一 "「まったくだ」"
+    太一 "「さあ、特別に千歳あめをつけるから、みんなで七五三気分に浸ろう」"
+    call gl(1,"TCYM0003|TCYM0003")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki020"
+    美希 "「わー、ちとせあめだ！」"
+    "霧が取り上げる。"
+    call gl(1,"TCYM0002|TCYM0002")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki021"
+    美希 "「うおー、何するだ！」"
+    call gl(2,"TCSK0002|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri013"
+    霧 "「お菓子だけじゃダメ」"
+    voice "vfCCC0031bmki022"
+    美希 "「自分だって食べてたくせにー！」"
+    call gl(2,"TCSK0000|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri014"
+    霧 "「ちゃんとごはん食べる。健康管理、これからは自分でしないといけないんだよ？」"
+    call gl(1,"TCYM0001|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki023"
+    美希 "「……へーい」"
+    "うーむ。"
+    call gl(2,"TCSK0000|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri015"
+    霧 "「なんですか？　いやらしい目でじっと見て……」"
+    太一 "「いやらしいって言うな」"
+    太一 "「いや、いいコンビだなって思って」"
+    call gl(1,"TCYM0003|TCYM0003")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki024"
+    美希 "「お花ちゃんたちですから」"
+    太一 "「デビューさせてやりたいくらいだ」"
+    call gl(1,"TCYM0000|TCYM0000")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki025"
+    美希 "「今デビューしてもなぁ……」"
+    call gl(2,"TCSK0006|TCSK000x")
+    call vsp(2,1)
+    with dissolve
+    voice "vfCCC0031bkri016"
+    霧 "「最高八枚までしか売れないね。ＣＤ」"
+    voice "vfCCC0031bmki026"
+    美希 "「ミリオンは夢のまた夢」"
+    voice "vfCCC0031bkri017"
+    霧 "「じゃあわたし、二枚買ってあげる」"
+    voice "vfCCC0031bmki027"
+    美希 "「じゃこっちも二枚買う」"
+    voice "vfCCC0031bkri018"
+    霧 "「十枚だね」"
+    call gl(1,"TCYM0003|TCYM0003")
+    call vsp(1,1)
+    with dissolve
+    voice "vfCCC0031bmki028"
+    美希 "「うん、十枚。二桁」"
+    "くすくす笑う。"
+    "ほんと、仲睦まじい。"
+    "その様子は、俺をほんの少しばかり、潤した。"
+    stop bgm
+    return
+    #
