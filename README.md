@@ -1,8 +1,9 @@
 # CROSS†CHANNEL 中文化（汉化）项目
-这里是 CROSS†CHANNEL 中文化（汉化）项目的 `[网站](http://crosschannel.cn/)`和`程序源代码`。
+这里是 CROSS†CHANNEL 中文化（汉化）项目的 [`网站`](http://crosschannel.cn/) 和`程序源代码`。
 
 目前我们完成的是“CROSS†CHANNEL 复刻版”的汉化工作，
-~2016年我们的任务是“CROSS†CHANNEL -Final Complete-”~，**2017-2018年我们的任务是“少女们向荒野进发”**。
+~2016年我们的任务是“CROSS†CHANNEL -Final Complete-”，“2017-2018年我们的任务是“少女们向荒野进发”。~
+**然后就没了。**
 
 ## 汉化人员 STAFF
 
