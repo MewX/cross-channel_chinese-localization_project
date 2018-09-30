@@ -1,0 +1,6 @@
+.vs/
+*.htm
+*.html
+Debug/
+Release/
+*.vcxproj.user

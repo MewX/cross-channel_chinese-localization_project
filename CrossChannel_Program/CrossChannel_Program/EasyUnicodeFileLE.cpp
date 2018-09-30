@@ -131,8 +131,8 @@ void EasyUnicodeFileLE::close( )
 
 wchar_t EasyUnicodeFileLE::readWchar( )//读取一个宽字符
 {
-	if( !IsReadMode ) return L'';//输出模式不允许读入
-	if( IsEOF( ) ) return L'';//如果已经在文件尾了，就不读了
+	if( !IsReadMode ) return 0;//输出模式不允许读入
+	if( IsEOF( ) ) return 0;//如果已经在文件尾了，就不读了
 
 	wchar_t Temp2[ 2 ];
 	wchar_t tempWC[ 2 ];
@@ -154,7 +154,7 @@ wchar_t EasyUnicodeFileLE::readWchar( )//读取一个宽字符
 	catch( ... ) {
 		cout << "ERROR_EUFLE008 - Unknown error." << endl;
 		system( "PAUSE" );
-		return L'';
+		return 0;
 	}
 	return tempWC[ 0 ];
 }
