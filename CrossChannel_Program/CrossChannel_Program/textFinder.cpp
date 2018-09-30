@@ -1,5 +1,3 @@
-
-
 // author: wiki908
 // crc32 by notwa@github
 
@@ -177,7 +175,5 @@ long textFinder::findh(const long leftHashIn, const char** rightTextOut, void * 
         return FDR_W_NXL;
     }
 
-
     return FDR_W_NXL;
 }
-

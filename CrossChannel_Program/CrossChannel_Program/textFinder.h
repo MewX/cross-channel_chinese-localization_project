@@ -1,8 +1,5 @@
-
-
 // author: wiki908
 // crc32 by notwa@github
-
 
 #pragma once
 

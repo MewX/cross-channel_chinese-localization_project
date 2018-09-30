@@ -41,4 +41,3 @@ using namespace std;
 
 #include "lzss_enc.h"
 #include "CrossChannelCrack.h"
-

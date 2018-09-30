@@ -141,21 +141,6 @@ string NASCToolBox::WstringToString( UINT LocalOption, wstring wstr ) const
 
 string NASCToolBox::IntToString( long i ) const
 {
-	//char Sign[ 2 ] = { '\0', '\0' };
-	//char t;
-	//string temp;
-	//if( i < 0 ) { i = -i; Sign[ 0 ] = '-'; } //负数要加负号
-	//while( i > 0 ) {
-	//	temp += (char)( 48 + i % 10 );
-	//	i /= 10;
-	//} //这样做出来的结果是反的。又因为不知道位数，所以不用itoa(...)
-	//for( int L = temp.length( ), j = 0; j < L / 2; j ++ ) {
-	//	t = temp[ j ];
-	//	temp[ j ] = temp[ L - 1 - j ];
-	//	temp[ L - 1 - j ] = t;
-	//} //反转数字部分
-	//return Sign + ( temp.length( ) == 0 ? "0": temp ); //符号+数字
-
 	char Str[ 11 ] = { 0 };
 	sprintf_s( Str, "%ld", i );
 	return Str;

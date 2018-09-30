@@ -33,8 +33,6 @@ public:
 
 	/*文件相关*/
 	void CreateFolder( string Name ) const;
-	// string getFileNameFull( string Path ) const;
-	// string getFileNamePure( string Path ) const;
 
 	/*图形处理相关*/
 	struct Martrix {

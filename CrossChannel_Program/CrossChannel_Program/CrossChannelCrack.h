@@ -2,8 +2,13 @@
 #define CROSSCHANNELCRACK_H
 
 #pragma pack( 1 )
+
+#ifdef IOREVISION
 #define ARC_VERSION 1
-//#define ARC_VERSION 2
+#else
+#define ARC_VERSION 2
+#endif
+
 #define SECTION_SIZE 10
 
 #if ARC_VERSION >= 2
@@ -33,7 +38,6 @@ CrossChannelCrack类的功能
 09.编码转区：从UTF-8到特定编码，注意检查与提示字符不在字符集内。
 10.编码转区：从特定编码到UTF-16
 11.编码转区：从UTF-16到特定编码，注意检查与提示字符不在字符集内。
-12.
 **********************************************************************/
 
 class CrossChannelCrack

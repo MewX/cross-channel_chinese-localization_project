@@ -2813,24 +2813,9 @@ void CrossChannelCrack::_02_getFileList( string FolderName, string SaveTo )
 				continue;
 			}
 			if( ( FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) { //判断如果是文件夹
-				/*
-				wchar_t DirAdd[MAX_PATH];
-				StringCchCopy(DirAdd,MAX_PATH,Dir);
-				StringCchCat(DirAdd,MAX_PATH,TEXT("\\"));  
-				StringCchCat(DirAdd,MAX_PATH,FindFileData.cFileName); //拼接得到此文件夹的完整路径
-				TraverseDirectory(DirAdd); //实现递归调用
-				*///本来这个函数名称是TraverseDirectory( wchat_t DirAdd[ MAX_PATH ] );
-				//wcout << "<Folder>" << FindFileData.cFileName << endl;//输出文件夹名就行了
-				//F.write( (char *)L"<Folder>", 16 );
-				//F.write( (char *)FindFileData.cFileName, 2 * wcslen( FindFileData.cFileName ) );
-				//F.write( "\x0D\x00\x0A\x00", 4 );
-				/**///F << "<Folder>" << WstringToString( 936, FindFileData.cFileName ) << endl;
+				// do nothing
 			}
 			else if( ( FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0) { //如果不是文件夹
-				//wcout<<Dir<<"\\"<<FindFileData.cFileName<<endl; //输出完整路径
-				//wcout << FindFileData.cFileName << endl;//输出文件名就行了
-				//F.write( (char *)FindFileData.cFileName, 2 * wcslen( FindFileData.cFileName ) );
-				//F.write( "\x0D\x00\x0A\x00", 4 );
 				F << WstringToString( 936, FindFileData.cFileName ) << endl;
 			}
 		}
@@ -2900,11 +2885,9 @@ void CrossChannelCrack::_03_getFileListAndSize( string FolderName, string SaveTo
 				continue;
 			}
 			if( ( FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) { //判断如果是文件夹
-				//wcout << "<Folder>" << FindFileData.cFileName << endl;//输出文件夹名就行了
-				/**///F << "<Folder>" << WstringToString( 936, FindFileData.cFileName ) << endl;
+				// do nothing
 			}
 			else if( ( FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0) { //如果不是文件夹
-				//wcout << FindFileData.cFileName << endl;//输出文件名就行了
 				string tempFName = WstringToString( 936, FindFileData.cFileName );
 				F << tempFName;
 				if( FolderName[ FolderName.length( ) - 1 ] != '\\' ) tempFName = "\\" + tempFName;
@@ -2999,15 +2982,10 @@ void CrossChannelCrack::getFolderList( string FolderName, string SaveTo )
 				StringCchCopy(DirAdd,MAX_PATH,Dir);
 				StringCchCat(DirAdd,MAX_PATH,TEXT("\\"));  
 				StringCchCat(DirAdd,MAX_PATH,FindFileData.cFileName); //拼接得到此文件夹的完整路径
-				//本来这个函数名称是TraverseDirectory( wchat_t DirAdd[ MAX_PATH ] );
-				//wcout << "<Folder>" << FindFileData.cFileName << endl;//输出文件夹名就行了
-				//F.write( (char *)L"<Folder>", 16 );
-				//F.write( (char *)FindFileData.cFileName, 2 * wcslen( FindFileData.cFileName ) );
-				//F.write( "\x0D\x00\x0A\x00", 4 );
 				F << WstringToString( 936, DirAdd ) << endl;
 			}
 			else if( ( FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0) { //如果不是文件夹
-				//F << WstringToString( 936, FindFileData.cFileName ) << endl;
+				// do nothing
 			}
 		}
 		FindClose( hFind );
@@ -3089,11 +3067,8 @@ unsigned __int64 CrossChannelCrack::LittleEndianCharsToValue( char LEValue[ 9 ] 
 	UINT ii = 0;
 	unsigned __int64 LEresult = 0;
 	while( ii < 9 ) {
-		//cout << "        >> LEValue[ ii ] = " << hex << (unsigned __int8)LEValue[ ii ] << dec << endl;
-		//cout << "        >> xx * pow( 256, ii ) = " << (unsigned __int8)LEValue[ ii ] * (unsigned __int64)pow( 256, ii ) << endl;
 		LEresult += (unsigned __int8)LEValue[ ii ] * (unsigned __int64)pow( 256, ii );
 		ii ++;
-		//cout << "        >> LEresult = " << LEresult << endl;
 	}
 	return LEresult;
 }
@@ -3222,11 +3197,6 @@ void CrossChannelCrack::wipf_fake( unsigned char  *buff,       // 输入文件正文的
 
 void CrossChannelCrack::Test( )
 {
-	/*//测试WstringToString的功能
-	cout << WstringToString( 936, L"夏元中\n夏元中\n夏元中\n夏元中\n夏元中\n夏元中\n夏元中\n夏元中" ) << endl;
-	cout << WstringToString( 936, L"abcdefg" ) << endl;
-	system( "PAUSE" );
-	*/
+	// used for future testings
 	return;
 }
-
