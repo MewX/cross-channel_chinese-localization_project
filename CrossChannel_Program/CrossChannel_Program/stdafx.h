@@ -17,10 +17,11 @@
 #include <string>
 #include <Strsafe.h>
 
-#define CROSSCHANNEL
+#define IOREVISION
 /** < WillPlus Project List >
  *  CROSSCHANNEL
  *  OTOMEGA
+ *  IO_REVISION_II
  **/
 
 using namespace std;

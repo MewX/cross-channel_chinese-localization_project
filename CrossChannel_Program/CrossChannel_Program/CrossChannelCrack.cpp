@@ -382,7 +382,7 @@ void CrossChannelCrack::__1_Unpack2( string FileName, string OutputFolder ) //复
 	};//定义文件扩展名相关的数据结构
 
 	struct FileArchive {
-		char Name[ 14 ];
+		char Name[FILENAME_LENGTH + 1];
 		unsigned __int64 Offset;
 		unsigned __int64 Size;
 	};//定义文件相关信息的数据结构
@@ -413,8 +413,8 @@ void CrossChannelCrack::__1_Unpack2( string FileName, string OutputFolder ) //复
 		FileArchive *File = new FileArchive [ (UINT)SUFFIX[ j ].Number ];//生成存储文件信息数据结构组
 		for( unsigned __int64 i = 0; i < SUFFIX[ j ].Number; i ++ ) {
 			/*把文件索引的内容存到内存*/
-			InFile.read( File[ i ].Name, 13 );
-			File[ i ].Name[ 13 ] = '\0';
+			InFile.read( File[ i ].Name, FILENAME_LENGTH);
+			File[ i ].Name[FILENAME_LENGTH] = '\0';
 
 			InFile.read( tempLittleEndian, 4 );
 			tempLittleEndian[ 4 ] = '\0';
@@ -1191,6 +1191,13 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 					&& FileContents[ i + 8 ] == 0x5F && FileContents[ i + 9 ] == 0x30 ) {
 					//选项结尾
 #endif
+#ifdef IOREVISION
+				// I/O revision II
+				else if (i > 2 && i + 7 < Size && FileContents[i] == 0x00 && FileContents[i - 1] == 0x00
+					&& FileContents[i + 1] == 0x01 && FileContents[i + 2] == 0x00 && FileContents[i + 3] == 0x03
+					&& FileContents[i + 4] == 0x01 && FileContents[i + 5] == 0x07 && FileContents[i + 6] == 0x00) {
+					//选项结尾
+#endif
 
 					
 					while( TTFlength - 2 >= 0 && ( TempTargetFile[ TTFlength - 1 ] != '\x0A' || TempTargetFile[ TTFlength - 2 ] != '\x0D' ) ) {
@@ -1305,23 +1312,19 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 				RealSaveToFolder[ strlen( RealSaveToFolder ) - 2 ] = 'M';
 				RealSaveToFolder[ strlen( RealSaveToFolder ) - 1 ] = 'S'; // OMS
 #endif
+#ifdef IOREVISION
+				RealSaveToFolder[strlen(RealSaveToFolder) - 3] = 'I';
+				RealSaveToFolder[strlen(RealSaveToFolder) - 2] = 'O';
+				RealSaveToFolder[strlen(RealSaveToFolder) - 1] = 'S'; // IOS
+#endif
 				ULE.open( RealSaveToFolder, ios_base::trunc | ios_base::out );
 				wstring TempTargetFileULE;
 
-#ifdef CROSSCHANNEL
 				TempTargetFileULE += L"//【翻译规范】（小提示：人物姓名可以按Ctrl+H批量替换，原文的换掉也没事）\n";
 				TempTargetFileULE += L"//原文例 >0○9999○[見里]「……それは……」\n";
 				TempTargetFileULE += L"//译文例 >1●9999●[见里]「……那个是……」\n";
 				TempTargetFileULE += L"//注：不要求译文比原文短；像这样的{傅:かしず}是注音；\\n是换行符，请保留\n";
 				TempTargetFileULE += L"//所有文本处理上的问题都可以发邮件到imewx@qq.com询问或直接找QQ307740614\n";
-#endif
-#ifdef OTOMEGA
-				TempTargetFileULE += L"//【翻译规范】（小提示：人物姓名可以按Ctrl+H批量替换，原文的换掉也没事）\n";
-				TempTargetFileULE += L"//原文例 >0○9999○[見里]「……それは……」\n";
-				TempTargetFileULE += L"//译文例 >1●9999●[见里]「……那个是……」\n";
-				TempTargetFileULE += L"//注：不要求译文比原文短；像这样的{傅:かしず}是注音；\\n是换行符，请保留\n";
-				TempTargetFileULE += L"//所有文本处理上的问题都可以发邮件到imewx@qq.com询问或直接找QQ307740614\n";
-#endif
 
 				int ULEStcCount = 1;
 				int ULEChoiceCount = 0;
@@ -1749,12 +1752,18 @@ void CrossChannelCrack::__4_Decrypt( string OriginalUnpackFolder, string PureScr
 					&& tempWSCFileContent[ i + 5 ] == 0x59 && tempWSCFileContent[ i + 6 ] == 0x30 && tempWSCFileContent[ i + 7 ] == 0x31
 					&& tempWSCFileContent[ i + 8 ] == 0x5F && tempWSCFileContent[ i + 9 ] == 0x30 ) { //选项结尾
 #endif
+#ifdef IOREVISION // I/O revision II
+				else if (i > 2 && i + 7 < tempLen && tempWSCFileContent[i] == 0x00 && tempWSCFileContent[i - 1] == 0x00
+					&& tempWSCFileContent[i + 1] == 0x01 && tempWSCFileContent[i + 2] == 0x00 && tempWSCFileContent[i + 3] == 0x03
+					&& tempWSCFileContent[i + 4] == 0x01 && tempWSCFileContent[i + 5] == 0x07 && tempWSCFileContent[i + 6] == 0x00) {
+					//选项结尾
+#endif
 					Sign = 'b'; break; // 判断是选项的结尾
 				}
 
 				WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝
 			} // 判断标记的while
-			if( i >= tempLen ) { cout << "break - " << tempFileName << "; i = " << i << endl;;break;} // 这样跳出循环没有输出
+			if( i >= tempLen ) { cout << "break - " << tempFileName << "; i = " << i << endl; break;} // 这样跳出循环没有输出
 			cout << "(" << Sign << ")";
 
 			cLine ++;
@@ -1980,17 +1989,10 @@ void CrossChannelCrack::__8_CCSProcess( string InputFolder, string OutputFolder 
 						break;
 					default:
 						if( !AddSign && CountStep != 0 ) {
-#ifdef CROSSCHANNEL
 							if( CountStep == 1 ) OutFile.writeln( L"//校对例 >2□9999□[见里]「……那个是……」" );
 							else if( CountStep == 2 ) OutFile.writeln( L"//润色例 >3■9999■[见里]「……那个是……」" );
 							else if( CountStep == 3 ) OutFile.writeln( L"//验收例 >4△9999△[见里]「……那个是……」" );
 							else ;
-#endif
-#ifdef OTOMEGA
-							if( CountStep == 1 ) OutFile.writeln( L"//润色例 >2□9999□[见里]「……那个是……」" );
-							else if( CountStep == 2 ) OutFile.writeln( L"//验收例 >3■9999■[见里]「……那个是……」" );
-							else ;
-#endif
 							AddSign = true;
 						}
 						break;

@@ -2,8 +2,8 @@
 #define CROSSCHANNELCRACK_H
 
 #pragma pack( 1 )
-//#define ARC_VERSION 1
-#define ARC_VERSION 2
+#define ARC_VERSION 1
+//#define ARC_VERSION 2
 #define SECTION_SIZE 10
 
 #if ARC_VERSION >= 2

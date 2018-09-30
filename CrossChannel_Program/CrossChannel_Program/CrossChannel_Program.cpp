@@ -133,6 +133,9 @@ CrossChannelCrack CC( "Cross Channel Translation Project" );
 #ifdef OTOMEGA
 CrossChannelCrack CC( "OtoMega Translation Project" );
 #endif
+#ifdef IOREVISION
+CrossChannelCrack CC("I/O Revision II Translation Project");
+#endif
 
 int main( )
 {
