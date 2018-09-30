@@ -1150,7 +1150,6 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 						TTFlength ++;
 					}
 					else {
-						//cout << "  Flag = a" << endl;
 						Flag = 'a';
 					}
 					continue;
@@ -1267,26 +1266,16 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 				else if( Flag == 'c' ) {
 					//不需要处理
 				}
-				else {
-					//cout << "  TempSave[ " << i << " ] = " << (short)TempSave[ i ] << endl;
-				}
 			}
-			//for( UINT i = 0; i < Size; i ++ ) {
-			//	cout << hex << (unsigned short)FileContents[ i ] << dec << ' ';
-			//}
-			//system("PAUSE");
-			
 			
 			/* 这里生成扩展名为wsc的解密后的脚本 */
 			strcpy_s( RealSaveToFolder, strlen( FileNameHeader ) + 1, FileNameHeader );//Essential
 			strcat_s( RealSaveToFolder, strlen( RealSaveToFolder ) + 9 + 1, "WSC_Main\\" );//Essential
 			_01_CreateFolder( RealSaveToFolder );//Essential
 			strcat_s( RealSaveToFolder, strlen( RealSaveToFolder ) + strlen( TempSave ) + 1, TempSave );//Essential
-			//for( unsigned int pp = 0; pp < Size; pp ++ ) FileContents[ pp ] = WSC_DecryptHelper( FileContents[ pp ] );
 			InFile.open( RealSaveToFolder, ios_base::trunc | ios_base::out | ios_base::binary );//Essential
 			InFile.write( FileContents, Size );//一次性全部存到文件中
 			InFile.close( );
-				
 				
 			cout << "TTF = " << TTFlength << endl;
 			if( TTFlength > 2 && Flag == NULL ) {
@@ -1299,9 +1288,6 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 				InFile.close( );
 				
 				EasyUnicodeFileLE ULE;
-				//RealSaveToFolder[ strlen( RealSaveToFolder ) - 3 ] = 'T';
-				//RealSaveToFolder[ strlen( RealSaveToFolder ) - 2 ] = 'X';
-				//RealSaveToFolder[ strlen( RealSaveToFolder ) - 1 ] = 'T';
 #ifdef CROSSCHANNEL
 				RealSaveToFolder[ strlen( RealSaveToFolder ) - 3 ] = 'C';
 				RealSaveToFolder[ strlen( RealSaveToFolder ) - 2 ] = 'C';
@@ -1328,13 +1314,11 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 
 				int ULEStcCount = 1;
 				int ULEChoiceCount = 0;
-				int Len = strlen( TempTargetFile );
 				bool StartNewLn = true, Redo = false;
 				string tmp; // 临时存储字符串，按行计算
 				wstring Sign1, Sign2;
-				for( int k = 0; k < Len; k ++ ) {
+				for( int k = 0; k < TTFlength; k ++ ) {
 					/* 二次处理，处理TempTargetFile到TempTargetFileULE里面 */
-					//if( StartNewLn ) {
 					if( TempTargetFile[ k ] == '>' && TempTargetFile[ k + 1 ] == '#' && TempTargetFile[ k + 2 ] == '#' && TempTargetFile[ k + 3 ] == '#' ){
 						ULEChoiceCount = 1;
 						k += 4;
@@ -1354,11 +1338,6 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 						for( int p = 1; p + num.length( ) <= 4; p ++ ) {
 							Sign1 += L"0";
 						} // 保留4位数字
-						//Sign1 += num + L"○"; // ○9999○
-						//Sign2 = Sign1;
-						//Sign2[ 0 ] = L'●';
-						//Sign2[ 5 ] = L'●'; // ●9999●
-						//StartNewLn = false;
 						Sign1 += num + L"○"; // >0○9999○
 						Sign2 = Sign1;
 						Sign2[ 1 ] = L'1';
@@ -1366,10 +1345,9 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 						Sign2[ 7 ] = L'●'; // >1●9999●
 						ULEStcCount ++;
 					}
-					//}
 					tmp.clear( ); // tmp清空
 
-					while( k + 1 < Len && !( TempTargetFile[ k ] == 0x0D && TempTargetFile[ k + 1 ] == 0x0A ) ) {
+					while( k + 1 < TTFlength && !( TempTargetFile[ k ] == 0x0D && TempTargetFile[ k + 1 ] == 0x0A ) ) {
 						tmp += TempTargetFile[ k ];
 						k ++;
 					}
@@ -1377,28 +1355,22 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 					k += 1; // 叠加器会+1
 
 					wstring res = TB.StringToWstring( 932, tmp ); // Shift-JIS
-					res[ res.length( ) - 1 ] = L'\n';
-					if( ULEChoiceCount ) TempTargetFileULE += L">0○选项" + TB.StringToWstring( 936, TB.IntToString( ULEChoiceCount ) ) + L"○";
-					else TempTargetFileULE += Sign1;
-					TempTargetFileULE += res;
-					if( ULEChoiceCount ) TempTargetFileULE += L">1●选项" + TB.StringToWstring( 936, TB.IntToString( ULEChoiceCount ) ) + L"●";
-					else TempTargetFileULE += Sign2;
-					TempTargetFileULE += res;
-					//StartNewLn = true;
-
+					if (res.length() > 1) {
+						res[res.length() - 1] = L'\n';
+						if (ULEChoiceCount) TempTargetFileULE += L">0○选项" + TB.StringToWstring(936, TB.IntToString(ULEChoiceCount)) + L"○";
+						else TempTargetFileULE += Sign1;
+						TempTargetFileULE += res;
+						if (ULEChoiceCount) TempTargetFileULE += L">1●选项" + TB.StringToWstring(936, TB.IntToString(ULEChoiceCount)) + L"●";
+						else TempTargetFileULE += Sign2;
+						TempTargetFileULE += res;
+					}
 				}
 				ULE.write( TempTargetFileULE );
 				ULE.close( );
-				// cout << "Stc = " << ULEStcCount << endl;
-				// system( "PAUSE" );
-
-
 			}
 			else {
 				cout << "  -> None Text." << endl;
-				// system( "PAUSE" );
 			}//没有文本的
-			//system( "PAUSE" );
 		}//WSC文件
 		else { }//判断不是已知文件扩展名
 		delete [ ] FileContents;

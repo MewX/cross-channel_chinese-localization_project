@@ -80,9 +80,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="crc32.h" />
     <ClInclude Include="CrossChannelCrack.h" />
     <ClInclude Include="EasyUnicodeFileLE.h" />
