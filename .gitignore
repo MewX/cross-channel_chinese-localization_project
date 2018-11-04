@@ -1,6 +1,8 @@
 .vs/
+.idea/
 *.htm
 *.html
 Debug/
 Release/
 *.vcxproj.user
+
