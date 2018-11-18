@@ -52,7 +52,7 @@ public:
 	void __1_Unpack2( string FileName, string OutputFolder ); //复刻版的解包
 	void __2_Pack( string pFileName, string SourceFolder ); //通过gFile获取封包类型，输出相应封包，源文件夹可以有注记文件
 	void __3_Decrypt( string InputFolder );
-	void __4_Decrypt( string OriginalUnpackFolder, string PureScriptFolder );
+	void __4_Encrypt( string OriginalUnpackFolder, string PureScriptFolder );
 	void __7_CalculateSaves( string GameFolder );//计算游戏攻略完成度
 	void __8_CCSProcess( string InputFolder, string OutputFolder ); // 处理CCS给下一个步骤，初翻-校对-润色-验收
 	void __9_CCSInit( string InputFolder, string OutputFolder, string ReferFolder );
