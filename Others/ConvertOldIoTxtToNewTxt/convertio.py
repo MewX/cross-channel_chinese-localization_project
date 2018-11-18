@@ -2,11 +2,18 @@ import re
 import sys
 import os
 
+# TODO: List
+"""
+1. need to support %K%p
+2. TXT choices are not shown
+3. close %K%P are not extracted, e.g. ED02.WSC: 遍在する未来？新たに見出された過去？
+"""
+
 print(repr(sys.argv))
 
-if len(sys.argv) != 3:
-    # python convertio.py /dev/shm/rio_workspace/damnit_txt /dev/shm/rio_workspace/new_txt
-    print("usage: python xxx.py <old_txt_folder_path> <new_txt_folder_path>")
+if len(sys.argv) != 4:
+    # py convertio.py /dev/shm/rio_workspace/damnit_txt /dev/shm/rio_workspace/new_txt /dev/shm/rio_workspace/old_txt
+    print("usage: python xxx.py <old_txt_folder_path> <new_txt_folder_path> <old_txt_folder_path>")
     sys.exit()
 
 
@@ -22,6 +29,11 @@ def walk(adr):
 dst_path = sys.argv[2]
 if dst_path[-1] != '/':
     dst_path = dst_path + '/'  # adding trailing '/'
+
+old_txt_path = sys.argv[3]
+if old_txt_path[-1] != '/':
+    old_txt_path = old_txt_path + '/'  # adding trailing '/'
+
 fl = walk(sys.argv[1])[:3]  # todo: disable this
 for fn in fl:
     if 'txt' not in fn.lower():
@@ -29,13 +41,19 @@ for fn in fl:
         continue
 
     filename = fn[fn.rindex('/') + 1:]
+    old_txt_filename = old_txt_path + filename
     dstname = dst_path + filename
     print("from {} to {}".format(fn, dstname))
     src = open(fn, 'r', encoding='utf16')
+    old_txt_file = open(old_txt_filename, 'r', encoding='shift_jis')
     dst = open(dstname, 'w', encoding='utf16')
 
     # main logic
+    print("'{}' begin ----------------------------------------".format(filename))
     lines = src.readlines()
+    old_txt_lines = old_txt_file.readlines()
+
+    new_txt_result = list()
     speaker_name = ""
     in_section = False
     passed_source_text = False
@@ -61,10 +79,18 @@ for fn in fl:
                     in_section = False
                     passed_source_text = False
                     continue
-                if len(speaker_name) == 0:
-                    print(source_text)
-                else:
-                    print('[{}]{}'.format(speaker_name, source_text))
+
+                output_text = source_text
+                if len(speaker_name) != 0:
+                    # a set of annoying replacements are listed here
+                    source_text = source_text.replace("—", "ー")  # dash
+                    if source_text[0] == "“" and source_text[-1] == "”":
+                        source_text = "「" + source_text[1:-1] + "」"
+
+                    # generate the output_text
+                    output_text = '[{}]{}'.format(speaker_name, source_text)
+                new_txt_result.append(output_text)
+                print(output_text)
             else:
                 print("ERROR: not found full tag")
                 sys.exit(-1)
@@ -76,5 +102,45 @@ for fn in fl:
             translated_text = line
             in_section = False
             passed_source_text = False
+            speaker_name = ""
         else:
             assert False
+
+    # comparing the result text and old_txt
+    print("'{}' comparing ----------------------------------------".format(filename))
+    i_old_txt = 0
+    for i in range(len(new_txt_result) - 1):
+        output_text = new_txt_result[i]
+        old_text = old_txt_lines[i_old_txt].strip()
+
+        if output_text != old_text:
+            # try to search down in old_txt_lines first
+            diff = 1
+            while i_old_txt + diff < len(old_txt_lines) and output_text != old_txt_lines[i_old_txt + diff].strip():
+                diff += 1
+            if i_old_txt + diff < len(old_txt_lines):
+                # found it! then damn-it text has one line missing
+                for i_diff in range(0, diff - 1):
+                    print("'{}' ERROR: damn-it text missing one line O#{}: '{}'"
+                          .format(filename, i_old_txt + 1, old_txt_lines[i_old_txt + i_diff].strip()))
+                i_old_txt += diff
+            else:
+                # not found, then old text has one line missing
+                print("'{}' ERROR: my text missing one line D#{}: '{}'"
+                      .format(filename, i, output_text))
+                i_old_txt -= 1
+        else:
+            # good, matching
+            print("'{}' GOOD: matching D#{}: '{}'".format(filename, i, output_text))
+            pass
+
+        # prepare for the next damn-it text
+        i_old_txt += 1
+
+    # then output the damn-it text missing endings
+    while i_old_txt < len(old_txt_lines):
+        print("'{}' ERROR: damn-it text missing one line O#{}: '{}'"
+              .format(filename, i_old_txt + 1, old_txt_lines[i_old_txt].strip()))
+        i_old_txt += 1
+
+    print("'{}' ending ----------------------------------------\n".format(filename))
