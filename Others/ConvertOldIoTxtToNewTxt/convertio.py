@@ -11,9 +11,13 @@ import os
 
 print(repr(sys.argv))
 
-if len(sys.argv) != 4:
-    # py convertio.py /dev/shm/rio_workspace/damnit_txt /dev/shm/rio_workspace/new_txt /dev/shm/rio_workspace/old_txt
-    print("usage: python xxx.py <old_txt_folder_path> <new_txt_folder_path> <old_txt_folder_path>")
+if len(sys.argv) != 5:
+    # py convertio.py
+    # /dev/shm/rio_workspace/damnit_txt
+    # /dev/shm/rio_workspace/new_txt
+    # /dev/shm/rio_workspace/old_txt
+    # /dev/shm/rio_workspace/source
+    print("usage: python xxx.py <old_txt_folder_path> <new_txt_folder_path> <old_txt_folder_path> <original_damn_txt>")
     sys.exit()
 
 
@@ -34,6 +38,10 @@ old_txt_path = sys.argv[3]
 if old_txt_path[-1] != '/':
     old_txt_path = old_txt_path + '/'  # adding trailing '/'
 
+original_path = sys.argv[4]
+if original_path[-1] != '/':
+    original_path = original_path + '/'  # adding trailing '/'
+
 fl = walk(sys.argv[1])[:3]  # todo: disable this
 for fn in fl:
     if 'txt' not in fn.lower():
@@ -43,23 +51,57 @@ for fn in fl:
     filename = fn[fn.rindex('/') + 1:]
     old_txt_filename = old_txt_path + filename
     dstname = dst_path + filename
+    source_name = original_path + filename
     print("from {} to {}".format(fn, dstname))
     src = open(fn, 'r', encoding='utf16')
     old_txt_file = open(old_txt_filename, 'r', encoding='shift_jis')
     dst = open(dstname, 'w', encoding='utf16')
+    source = open(source_name, 'r', encoding='utf16')
 
     # main logic
     print("'{}' begin ----------------------------------------".format(filename))
     lines = src.readlines()
     old_txt_lines = old_txt_file.readlines()
+    source_lines = source.readlines()
 
+    # loop through the source and get all source texts
+    source_text_parsed = list()
+    speaker_name = ""
+    expecting = 0
+    for i in range(1, len(source_lines) - 1):
+        line = source_lines[i].strip()
+        if len(line) == 0:
+            continue  # ignore all empty lines
+
+        if re.match(r'^<\d\d.+?single>$', line):
+            # begin of a section
+            assert expecting is 0 or expecting is 1  # sometimes the single block is empty
+            expecting = 1
+        elif re.match(r'^<\d\d.+?double>$', line):
+            # begin of a section
+            assert expecting is 0  # having issues with ED02 from source!!!!
+            speaker_name = ""
+            expecting = 2
+        elif expecting == 2:
+            speaker_name = line
+            expecting -= 1
+        else:
+            output_text = line
+            if speaker_name != "":
+                output_text = '[{}]{}'.format(speaker_name, line)
+            print("src: " + output_text)
+            source_text_parsed.append(output_text)
+            expecting -= 1
+
+    # new text
     new_txt_result = list()
+    new_txt_translated = list()
     speaker_name = ""
     in_section = False
     passed_source_text = False
     for i in range(1, len(lines) - 1):
         line = lines[i].strip()
-        print("'{}' LINE {}: {}".format(filename, i + 1, line))
+        # print("'{}' LINE {}: {}".format(filename, i + 1, line))
         if len(line) == 0:
             continue  # ignore all empty lines
 
@@ -90,7 +132,7 @@ for fn in fl:
                     # generate the output_text
                     output_text = '[{}]{}'.format(speaker_name, source_text)
                 new_txt_result.append(output_text)
-                print(output_text)
+                # print(output_text)
             else:
                 print("ERROR: not found full tag")
                 sys.exit(-1)
@@ -100,6 +142,17 @@ for fn in fl:
         elif in_section and passed_source_text:
             # the main translated text section
             translated_text = line
+            output_text = translated_text
+
+            if len(speaker_name) != 0:
+                # a set of annoying replacements are listed here
+                # source_text = translated_text.replace("—", "ー")  # dash
+
+                # generate the output_text
+                output_text = '[{}]{}'.format(speaker_name, translated_text)
+            new_txt_translated.append(output_text)
+            print("trans: " + output_text)
+
             in_section = False
             passed_source_text = False
             speaker_name = ""
