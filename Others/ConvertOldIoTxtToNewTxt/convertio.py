@@ -75,11 +75,11 @@ for fn in fl:
 
         if re.match(r'^<\d\d.+?single>$', line):
             # begin of a section
-            assert expecting is 0 or expecting is 1  # sometimes the single block is empty
+            assert expecting is not 2  # sometimes the single block is empty
             expecting = 1
         elif re.match(r'^<\d\d.+?double>$', line):
             # begin of a section
-            assert expecting is 0  # having issues with ED02 from source!!!!
+            assert expecting is not 2  # sometimes the single block is empty and followed by a double block
             speaker_name = ""
             expecting = 2
         elif expecting == 2:
@@ -162,9 +162,9 @@ for fn in fl:
     # comparing the result text and old_txt
     print("'{}' comparing ----------------------------------------".format(filename))
     i_old_txt = 0
-    for i in range(len(new_txt_result) - 1):
+    for i in range(len(new_txt_result)):
         output_text = new_txt_result[i]
-        old_text = old_txt_lines[i_old_txt].strip()
+        old_text = old_txt_lines[i_old_txt].strip() if i_old_txt < len(old_txt_lines) else None  # could be shorter
 
         if output_text != old_text:
             # try to search down in old_txt_lines first
@@ -173,14 +173,13 @@ for fn in fl:
                 diff += 1
             if i_old_txt + diff < len(old_txt_lines):
                 # found it! then damn-it text has one line missing
-                for i_diff in range(0, diff - 1):
+                for i_diff in range(diff):
                     print("'{}' ERROR: damn-it text missing one line O#{}: '{}'"
                           .format(filename, i_old_txt + 1, old_txt_lines[i_old_txt + i_diff].strip()))
                 i_old_txt += diff
             else:
                 # not found, then old text has one line missing
-                print("'{}' ERROR: my text missing one line D#{}: '{}'"
-                      .format(filename, i, output_text))
+                print("'{}' ERROR: my text missing one line D#{}: '{}'".format(filename, i, output_text))
                 i_old_txt -= 1
         else:
             # good, matching
