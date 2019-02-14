@@ -1726,6 +1726,7 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 					&& tempWSCFileContent[ i + 8 ] == 0x5F && tempWSCFileContent[ i + 9 ] == 0x30 ) { //选项结尾
 #endif
 #ifdef IOREVISION // I/O revision II
+					// TODO: double check this
 				else if (i > 2 && i + 7 < tempLen && tempWSCFileContent[i] == 0x00 && tempWSCFileContent[i - 1] == 0x00
 					&& tempWSCFileContent[i + 1] == 0x01 && tempWSCFileContent[i + 2] == 0x00 && tempWSCFileContent[i + 3] == 0x03
 					&& tempWSCFileContent[i + 4] == 0x01 && tempWSCFileContent[i + 5] == 0x07 && tempWSCFileContent[i + 6] == 0x00) {
@@ -1763,14 +1764,8 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 					while (index < temp.length()) {
 						WSCFileContent_CHS[OutLen].srcChar = temp[index++];
 						WSCFileContent_CHS[OutLen++].srcPos = 0;
-
 						//WSCFileContent_CHS[OutLen++] = temp[index++]; // 句子复制过去
 					}
-					while (!(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'K' && tempWSCFileContent[i + 2] == '%'
-						&& (tempWSCFileContent[i + 3] == 'P' || tempWSCFileContent[i + 3] == 'O'))) i++;
-					//cerr << "3 ";
-					for (int k = 0; k < 4; k++) WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝 %K%P 或者 %K%O
-					break;
 				}
 				else {
 					unsigned int index = 0;
@@ -1779,14 +1774,15 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 					while (index < temp.length()) {
 						WSCFileContent_CHS[OutLen].srcChar = temp[index++];
 						WSCFileContent_CHS[OutLen++].srcPos = 0;
-
 						//WSCFileContent_CHS[OutLen++] = temp[index++]; // 句子复制过去
 					}
-					while (!(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'K' && tempWSCFileContent[i + 2] == '%'
-						&& (tempWSCFileContent[i + 3] == 'P' || tempWSCFileContent[i + 3] == 'O'))) i++;
-					for (int k = 0; k < 4; k++) WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝%K%P
-					break;
 				}
+				while (!(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'K' && tempWSCFileContent[i + 2] == '%'
+					&& (tempWSCFileContent[i + 3] == 'P' || tempWSCFileContent[i + 3] == 'O'))) i++;
+				//cerr << "3 ";
+				for (int k = 0; k < 4; k++) WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝 %K%P 或者 %K%O
+				break;
+
 			case 'b': // 判断是选项的结尾
 				{
 					OutLen --; i --; // 判断选项时，用到了i-1作索引
