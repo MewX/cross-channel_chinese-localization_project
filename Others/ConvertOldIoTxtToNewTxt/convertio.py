@@ -21,6 +21,21 @@ if len(sys.argv) != 5:
     sys.exit()
 
 
+NOT_MATCHING_CHAR = ("ー", "―", "—", "‘", "’", "“", "”", "「", "」", "《", "》", "『", "』")
+NOT_INCLUDED_CHAR = ("！", "。", "　")
+
+
+def rip(text):
+    # replace all not matching characters
+    for c in NOT_MATCHING_CHAR:
+        text = text.replace(c, 'x')
+
+    # remove all excluded char
+    for c in NOT_INCLUDED_CHAR:
+        text = text.replace(c, '')
+    return text
+
+
 def walk(adr):
     mylist = []
     for root, dirs, files in os.walk(adr):
@@ -105,6 +120,7 @@ for fn in fl:
         if len(line) == 0:
             continue  # ignore all empty lines
 
+        line = rip(line)
         if re.match(r'^<\d\d.+?$', line):
             # begin of a section
             assert in_section is False
@@ -124,11 +140,6 @@ for fn in fl:
 
                 output_text = source_text
                 if len(speaker_name) != 0:
-                    # a set of annoying replacements are listed here
-                    source_text = source_text.replace("—", "ー")  # dash
-                    if source_text[0] == "“" and source_text[-1] == "”":
-                        source_text = "「" + source_text[1:-1] + "」"
-
                     # generate the output_text
                     output_text = '[{}]{}'.format(speaker_name, source_text)
                 new_txt_result.append(output_text)
@@ -145,9 +156,6 @@ for fn in fl:
             output_text = translated_text
 
             if len(speaker_name) != 0:
-                # a set of annoying replacements are listed here
-                # source_text = translated_text.replace("—", "ー")  # dash
-
                 # generate the output_text
                 output_text = '[{}]{}'.format(speaker_name, translated_text)
             new_txt_translated.append(output_text)
@@ -166,24 +174,33 @@ for fn in fl:
         output_text = new_txt_result[i]
         old_text = old_txt_lines[i_old_txt].strip() if i_old_txt < len(old_txt_lines) else None  # could be shorter
 
+        # replace all not matching characters
+        if old_text is not None:
+            old_text = rip(old_text)
+
         if output_text != old_text:
+            print("'{}' ERROR: HIGH LEVEL NOT MATCHING: '{}' - '{}'".format(filename, output_text, old_text))
+
             # try to search down in old_txt_lines first
             diff = 1
-            while i_old_txt + diff < len(old_txt_lines) and output_text != old_txt_lines[i_old_txt + diff].strip():
+            while i_old_txt + diff < len(old_txt_lines) and output_text != rip(old_txt_lines[i_old_txt + diff].strip()):
                 diff += 1
             if i_old_txt + diff < len(old_txt_lines):
                 # found it! then damn-it text has one line missing
                 for i_diff in range(diff):
-                    print("'{}' ERROR: damn-it text missing one line O#{}: '{}'"
+                    print("'{}' ERROR: damn-it missing one line O#{}: '{}'"
                           .format(filename, i_old_txt + 1, old_txt_lines[i_old_txt + i_diff].strip()))
                 i_old_txt += diff
             else:
                 # not found, then old text has one line missing
-                print("'{}' ERROR: my text missing one line D#{}: '{}'".format(filename, i, output_text))
+                print("'{}' ERROR: my text missing one line D#{}: '{}'"
+                      .format(filename, i,
+                              old_txt_lines[i_old_txt].strip() if i_old_txt < len(old_txt_lines) else None))
                 i_old_txt -= 1
         else:
             # good, matching
-            print("'{}' GOOD: matching D#{}: '{}'".format(filename, i, output_text))
+            new_txt_result[i] = old_txt_lines[i_old_txt].strip()
+            print("'{}' GOOD: matching D#{}: '{}'".format(filename, i, new_txt_result[i]))
             pass
 
         # prepare for the next damn-it text
