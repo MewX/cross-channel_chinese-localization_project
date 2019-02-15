@@ -1110,6 +1110,7 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 			const char TextTail[4] = { (char)WSC_DecryptHelper( 0x94 ), (char)WSC_DecryptHelper( 0x2D ),
 									   (char)WSC_DecryptHelper( 0x94 ), (char)WSC_DecryptHelper( 0x41 ) }; //文本结尾
 			const char TextTail2[4] = { TextTail[0], TextTail[1], TextTail[2], (char)WSC_DecryptHelper(0x3D) }; //文本结尾2 (used in I/O only)
+			const char TextTail3[4] = { TextTail[0], TextTail[1], TextTail[2], (char)WSC_DecryptHelper(0xC1) }; //文本结尾3 (used in I/O only)
 			//cout << "TE: " << TextTail[ 0 ] << ' ' << TextTail[ 1 ] << ' ' << TextTail[ 2 ] << ' ' << TextTail[ 3 ] << endl;
 			const char PinyinHeader  =   (char)WSC_DecryptHelper( 0xED );                                    //注释开头   {
 			const char PinyinMiddle  =   (char)WSC_DecryptHelper( 0xE8 );                                    //注释分隔符 :
@@ -1158,7 +1159,8 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 				else if (i + 3 < Size && FileContents[i] == TextTail[0] &&
 					FileContents[i + 1] == TextTail[1] &&
 					FileContents[i + 2] == TextTail[2] &&
-					(FileContents[i + 3] == TextTail[3] || FileContents[i + 3] == TextTail2[3])) {//文本尾部，注意保存及换行
+					(FileContents[i + 3] == TextTail[3] || FileContents[i + 3] == TextTail2[3] || FileContents[i + 3] == TextTail3[3])) {
+					//文本尾部，注意保存及换行
 					Flag = NULL;
 					i += 3;//可以跳过去了
 					TempTargetFile[ TTFlength ] = '\x0D';
@@ -1778,7 +1780,7 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 					}
 				}
 				while (!(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'K' && tempWSCFileContent[i + 2] == '%'
-					&& (tempWSCFileContent[i + 3] == 'P' || tempWSCFileContent[i + 3] == 'O'))) i++;
+					&& (tempWSCFileContent[i + 3] == 'P' || tempWSCFileContent[i + 3] == 'p' || tempWSCFileContent[i + 3] == 'O'))) i++;
 				//cerr << "3 ";
 				for (int k = 0; k < 4; k++) WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝 %K%P 或者 %K%O
 				break;
