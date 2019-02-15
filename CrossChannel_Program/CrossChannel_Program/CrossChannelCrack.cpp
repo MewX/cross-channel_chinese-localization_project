@@ -1111,7 +1111,6 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 									   (char)WSC_DecryptHelper( 0x94 ), (char)WSC_DecryptHelper( 0x41 ) }; //文本结尾
 			const char TextTail2[4] = { TextTail[0], TextTail[1], TextTail[2], (char)WSC_DecryptHelper(0x3D) }; //文本结尾2 (used in I/O only)
 			const char TextTail3[4] = { TextTail[0], TextTail[1], TextTail[2], (char)WSC_DecryptHelper(0xC1) }; //文本结尾3 (used in I/O only)
-			//cout << "TE: " << TextTail[ 0 ] << ' ' << TextTail[ 1 ] << ' ' << TextTail[ 2 ] << ' ' << TextTail[ 3 ] << endl;
 			const char PinyinHeader  =   (char)WSC_DecryptHelper( 0xED );                                    //注释开头   {
 			const char PinyinMiddle  =   (char)WSC_DecryptHelper( 0xE8 );                                    //注释分隔符 :
 			const char PinyinTail    =   (char)WSC_DecryptHelper( 0xF5 );                                    //注释结尾   }
@@ -1358,15 +1357,15 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 					k += 1; // 叠加器会+1
 
 					wstring res = TB.StringToWstring( 932, tmp ); // Shift-JIS
-					if (res.length() > 1) {
-						res[res.length() - 1] = L'\n';
+					//if (res.length() > 1) {
+						//res[res.length() - 1] = L'\n';
 						if (ULEChoiceCount) TempTargetFileULE += L">0○选项" + TB.StringToWstring(936, TB.IntToString(ULEChoiceCount)) + L"○";
 						else TempTargetFileULE += Sign1;
 						TempTargetFileULE += res;
 						if (ULEChoiceCount) TempTargetFileULE += L">1●选项" + TB.StringToWstring(936, TB.IntToString(ULEChoiceCount)) + L"●";
 						else TempTargetFileULE += Sign2;
 						TempTargetFileULE += res;
-					}
+					//}
 				}
 				ULE.write( TempTargetFileULE );
 				ULE.close( );
