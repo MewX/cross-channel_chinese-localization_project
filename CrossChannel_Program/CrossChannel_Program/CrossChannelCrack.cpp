@@ -1157,13 +1157,10 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 					continue;
 				}
 				else if (i + 3 < Size && FileContents[i] == TextTail[0] &&
-					FileContents[i + 1] == TextTail[1] &&
-					FileContents[i + 2] == TextTail[2] &&
-					(FileContents[i + 3] == TextTail[3] || FileContents[i + 3] == TextTail2[3]
-						|| FileContents[i + 3] == TextTail3[3] || FileContents[i + 3] == TextTail4[3])) {
+					FileContents[i + 1] == TextTail[1]) {
 					//文本尾部，注意保存及换行
 					Flag = NULL;
-					i += 3;//可以跳过去了
+					i += 1;//可以跳过去了
 					TempTargetFile[ TTFlength ] = '\x0D';
 					TempTargetFile[ TTFlength + 1 ] = '\x0A';//换行
 					TTFlength += 2;
@@ -1220,7 +1217,7 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 					int offset = 2; // 向前偏移到正文
 
 					//找选项开头（目测0x0001~0x01之间有猫腻，但是直接过掉）
-					while( FileContents[ i - offset ] != 0x00 && FileContents[ i - offset ] != 0x01 ) offset ++; // 返回到前面找到正文
+					while((unsigned char)FileContents[ i - offset ] > (unsigned char)0x04) offset ++; // 返回到前面找到正文
 					TempTargetFile[ TTFlength ] = '#';
 					if( FileContents[ i + 1 ] == 0x52 ) TempTargetFile[ TTFlength ] = '>';
 					TempTargetFile[ TTFlength + 1 ] = '#';
@@ -1780,11 +1777,9 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 						//WSCFileContent_CHS[OutLen++] = temp[index++]; // 句子复制过去
 					}
 				}
-				while (!(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'K' && tempWSCFileContent[i + 2] == '%'
-					&& (tempWSCFileContent[i + 3] == 'P' || tempWSCFileContent[i + 3] == 'p' || tempWSCFileContent[i + 3] == 'N'
-						|| tempWSCFileContent[i + 3] == 'O'))) i++;
+				while (!(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'K')) i++;
 				//cerr << "3 ";
-				for (int k = 0; k < 4; k++) WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝 %K%P 或者 %K%O
+				for (int k = 0; k < 2; k++) WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝 %K
 				break;
 
 			case 'b': // 判断是选项的结尾
@@ -1793,7 +1788,7 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 
 					unsigned int offset = 1;
 					//找选项开头（目测0x0001~0x01之间有猫腻，但是直接过掉）
-					while( tempWSCFileContent[ i - offset ] != 0x00 && tempWSCFileContent[ i - offset ] != 0x01 ) offset ++; // 返回到前面找到正文
+					while((unsigned char)tempWSCFileContent[ i - offset ] > (unsigned char)0x04) offset ++; // 返回到前面找到正文
 					for( offset --; offset > 0; offset -- ) OutLen --; // 判断的时候已经将选项内容复制过去了，现在要抹掉
 					unsigned int index = 4; // 过 >### 和 ####
 					string temp; getline( gFile, temp, '\n' );
