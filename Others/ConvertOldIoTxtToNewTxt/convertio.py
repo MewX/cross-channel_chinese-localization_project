@@ -158,7 +158,7 @@ for fn in fl:
             if len(speaker_name) != 0:
                 # generate the output_text
                 output_text = '[{}]{}'.format(speaker_name, translated_text)
-            new_txt_translated.append(output_text)
+            new_txt_translated.append(lines[i].strip())
             # print("trans: " + output_text)
 
             in_section = False
@@ -193,10 +193,17 @@ for fn in fl:
                     print("'{}' ERROR: damn-it missing one line O#{}: '{}'"
                           .format(filename, i_old_txt + 1, missing_line))
                     final_translated_txt.append(missing_line)
-                i_old_txt += diff  # fixme: bug here
+
+                i_old_txt += diff
+
+                # now solve the [i] one, otherwise missing
+                new_txt_result[i] = old_txt_lines[i_old_txt].strip()
+                print("'{}' GOOD: matching 4#{}: '{}'".format(filename, i, new_txt_result[i]))
+                final_translated_txt.append(new_txt_translated[i])
+
             else:
                 # not found, then old text has one line missing
-                print("'{}' ERROR: my text missing one line D#{}: '{}' - '{}'"
+                print("'{}' ERROR: my text missing one line 1#{}: '{}' - '{}'"
                       .format(filename, i,
                               old_txt_lines[i_old_txt].strip() if i_old_txt < len(old_txt_lines) else None,
                               new_txt_translated[i]))
@@ -204,9 +211,8 @@ for fn in fl:
         else:
             # good, matching
             new_txt_result[i] = old_txt_lines[i_old_txt].strip()
-            print("'{}' GOOD: matching D#{}: '{}'".format(filename, i, new_txt_result[i]))
+            print("'{}' GOOD: matching 2#{}: '{}'".format(filename, i, new_txt_result[i]))
             final_translated_txt.append(new_txt_translated[i])
-            pass
 
         # prepare for the next damn-it text
         i_old_txt += 1
@@ -214,7 +220,7 @@ for fn in fl:
     # then output the damn-it text missing endings
     while i_old_txt < len(old_txt_lines):
         missing_line = old_txt_lines[i_old_txt].strip()
-        print("'{}' ERROR: damn-it text missing one line O#{}: '{}'"
+        print("'{}' ERROR: damn-it text missing one line 3#{}: '{}'"
               .format(filename, i_old_txt + 1, missing_line))
         final_translated_txt.append(missing_line)
         i_old_txt += 1
