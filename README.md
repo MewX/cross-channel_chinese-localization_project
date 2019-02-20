@@ -168,3 +168,14 @@
 ### Website @gh-pages
 
 这个就是 http://crosschannel.cn 的网站啦，静态的没错，不过感谢GitHub提供服务器。
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="https://github.com/shuye02"><img src="https://avatars1.githubusercontent.com/u/22615765?v=4" width="100px;" alt="Ye Shu"/><br /><sub><b>Ye Shu</b></sub></a><br /><a href="https://github.com/MewX/cross-channel_chinese-localization_project/commits?author=shuye02" title="Documentation">📖</a></td></tr></table>
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
