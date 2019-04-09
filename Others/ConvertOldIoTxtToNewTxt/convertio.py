@@ -4,9 +4,7 @@ import os
 
 # TODO: List
 """
-1. need to support %K%p
-2. TXT choices are not shown
-3. close %K%P are not extracted, e.g. ED02.WSC: 遍在する未来？新たに見出された過去？
+1. close %K%P are not extracted, e.g. ED02.WSC: 遍在する未来？新たに見出された過去？
 """
 
 print(repr(sys.argv))
@@ -256,5 +254,9 @@ for fn in fl:
         for i in range(min(len(old_txt_lines), len(final_translated_txt)), len(final_translated_txt)):
             print("final_translated_txt has extra: '{}'".format(final_translated_txt[i]))
     assert len(old_txt_lines) == len(final_translated_txt)
+
+    # output to new_txt folder
+    for translated_text in final_translated_txt:
+        dst.write(translated_text + '\r\n')
 
 print('Overall, my error count: {}'.format(my_error_count))
