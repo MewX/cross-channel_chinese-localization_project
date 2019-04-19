@@ -21,11 +21,8 @@ if len(sys.argv) != 5:
     sys.exit()
 
 
-NOT_MATCHING_CHAR = ("ー", "―", "—", "－", "−", "‘", "’", "“", "”", "「", "」", "《", "》", "『", "』", "¥", "\\", "〜", "～")
-NOT_INCLUDED_CHAR = ("！", "。", "　", "。", "、")
-
-# e.g. ("ED00.TXT")
-FILE_NAME_TO_DEBUG = ()
+NOT_MATCHING_CHAR = ("ー", "―", "—", "‘", "’", "“", "”", "「", "」", "《", "》", "『", "』")
+NOT_INCLUDED_CHAR = ("！", "。", "　")
 
 
 def rip(text):
@@ -60,20 +57,19 @@ original_path = sys.argv[4]
 if original_path[-1] != '/':
     original_path = original_path + '/'  # adding trailing '/'
 
-my_error_count = 0
-fl = walk(sys.argv[1])
+fl = walk(sys.argv[1])[:3]  # todo: disable this
 for fn in fl:
     if 'txt' not in fn.lower():
         print('error in filename: ' + fn)
         continue
 
-    filename = fn[fn.rindex('/') + 1:].upper()
+    filename = fn[fn.rindex('/') + 1:]
     old_txt_filename = old_txt_path + filename
     dstname = dst_path + filename
     source_name = original_path + filename
     print("from {} to {}".format(fn, dstname))
     src = open(fn, 'r', encoding='utf16')
-    old_txt_file = open(old_txt_filename, 'r', encoding='shift_jisx0213', errors='ignore')
+    old_txt_file = open(old_txt_filename, 'r', encoding='shift_jis')
     dst = open(dstname, 'w', encoding='utf16')
     source = open(source_name, 'r', encoding='utf16')
 
@@ -89,7 +85,7 @@ for fn in fl:
     expecting = 0
     for i in range(len(source_lines) - 1):
         line = source_lines[i].strip()
-        if len(line) == 0 or re.match(r'^<!.*?', line):
+        if len(line) == 0 or i == 0 and re.match(r'^<!.*?', line):
             continue  # ignore all empty lines
 
         if re.match(r'^<\d\d.+?single>$', line):
@@ -105,14 +101,12 @@ for fn in fl:
             speaker_name = line
             expecting -= 1
         else:
-            output_text = source_lines[i].strip()
+            output_text = line
             if speaker_name != "":
-                output_text = '[{}]{}'.format(speaker_name, output_text)
-            if filename in FILE_NAME_TO_DEBUG:
-                print("src: " + output_text)
+                output_text = '[{}]{}'.format(speaker_name, line)
+            # print("src: " + output_text)
             source_text_parsed.append(output_text)
             expecting -= 1
-            speaker_name = ""
 
     # new text
     new_txt_result = list()
@@ -122,14 +116,14 @@ for fn in fl:
     passed_source_text = False
     for i in range(len(lines) - 1):
         line = lines[i].strip()
-        if filename in FILE_NAME_TO_DEBUG:
-            print("'{}' LINE {}: {}".format(filename, i + 1, line))
+        # print("'{}' LINE {}: {}".format(filename, i + 1, line))
         if len(line) == 0 or i == 0 and re.match(r'^<!.*?', line):
             continue  # ignore all empty lines
 
         line = rip(line)
         if re.match(r'^<\d\d.+?$', line):
             # begin of a section
+            assert in_section is False
             assert passed_source_text is False
             in_section = True
         elif re.match(r'^<!.*?', line):
@@ -151,7 +145,7 @@ for fn in fl:
                 new_txt_result.append(output_text)
                 # print(output_text)
             else:
-                print("ERROR: not found full tag in line #{} '{}'".format(i, line))
+                print("ERROR: not found full tag")
                 sys.exit(-1)
         elif in_section and not passed_source_text:
             # the name section
@@ -171,24 +165,14 @@ for fn in fl:
             passed_source_text = False
             speaker_name = ""
         else:
-            print("ERROR: unknown state in line #{} '{}'".format(i, line))
             assert False
 
     # comparing the result text and old_txt
-    print("source_text_parsed: {} VS new_txt_translated {}".format(len(source_text_parsed), len(new_txt_translated)))
-    if filename in FILE_NAME_TO_DEBUG:
-        for i in range(min(len(old_txt_lines), len(new_txt_translated))):
-            print("'{}' translate to: '{}'".format(old_txt_lines[i].strip(), new_txt_translated[i].strip()))
-        for i in range(min(len(old_txt_lines), len(new_txt_translated)), len(old_txt_lines)):
-            print("old text has extra: '{}'".format(old_txt_lines[i].strip()))
-        for i in range(min(len(old_txt_lines), len(new_txt_translated)), len(new_txt_translated)):
-            print("new_txt_translated has extra: '{}'".format(new_txt_translated[i].strip()))
-    assert len(source_text_parsed) == len(new_txt_translated)
     print("'{}' comparing ----------------------------------------".format(filename))
     final_translated_txt = []
     i_old_txt = 0
-    for i in range(len(source_text_parsed)):
-        output_text = rip(source_text_parsed[i])  # already ripped
+    for i in range(len(new_txt_result)):
+        output_text = new_txt_result[i]  # already ripped
         old_text = old_txt_lines[i_old_txt].strip() if i_old_txt < len(old_txt_lines) else None  # could be shorter
 
         # replace all not matching characters
@@ -196,7 +180,7 @@ for fn in fl:
             old_text = rip(old_text)
 
         if output_text != old_text:
-            # print("'{}' ERROR: HIGH LEVEL NOT MATCHING: '{}' - '{}'".format(filename, output_text, old_text))
+            print("'{}' ERROR: HIGH LEVEL NOT MATCHING: '{}' - '{}'".format(filename, output_text, old_text))
 
             # try to search down in old_txt_lines first
             diff = 1
@@ -213,25 +197,21 @@ for fn in fl:
                 i_old_txt += diff
 
                 # now solve the [i] one, otherwise missing
-                source_text_parsed[i] = old_txt_lines[i_old_txt].strip()
-                if filename in FILE_NAME_TO_DEBUG:
-                    print("'{}' GOOD: matching 4#{}: '{}'".format(filename, i, source_text_parsed[i]))
+                new_txt_result[i] = old_txt_lines[i_old_txt].strip()
+                print("'{}' GOOD: matching 4#{}: '{}'".format(filename, i, new_txt_result[i]))
                 final_translated_txt.append(new_txt_translated[i])
 
             else:
                 # not found, then old text has one line missing
-                my_error_count += 1
-                print("'{}' ERROR: my text missing one line 1#{}: '{}' vs '{}' - '{}'"
+                print("'{}' ERROR: my text missing one line 1#{}: '{}' - '{}'"
                       .format(filename, i,
                               old_txt_lines[i_old_txt].strip() if i_old_txt < len(old_txt_lines) else None,
-                              source_text_parsed[i],
                               new_txt_translated[i]))
                 i_old_txt -= 1
         else:
             # good, matching
-            source_text_parsed[i] = old_txt_lines[i_old_txt].strip()
-            if filename in FILE_NAME_TO_DEBUG:
-                print("'{}' GOOD: matching 2#{}: '{}'".format(filename, i, source_text_parsed[i]))
+            new_txt_result[i] = old_txt_lines[i_old_txt].strip()
+            print("'{}' GOOD: matching 2#{}: '{}'".format(filename, i, new_txt_result[i]))
             final_translated_txt.append(new_txt_translated[i])
 
         # prepare for the next damn-it text
@@ -248,13 +228,6 @@ for fn in fl:
     print("'{}' ending ----------------------------------------\n".format(filename))
 
     print("old txt line: {} VS final translated txt {}".format(len(old_txt_lines), len(final_translated_txt)))
-    if filename in FILE_NAME_TO_DEBUG:
-        for i in range(min(len(old_txt_lines), len(final_translated_txt))):
-            print("'{}' translate to: '{}'".format(old_txt_lines[i], final_translated_txt[i]))
-        for i in range(min(len(old_txt_lines), len(final_translated_txt)), len(old_txt_lines)):
-            print("old text has extra: '{}'".format(old_txt_lines[i]))
-        for i in range(min(len(old_txt_lines), len(final_translated_txt)), len(final_translated_txt)):
-            print("final_translated_txt has extra: '{}'".format(final_translated_txt[i]))
     assert len(old_txt_lines) == len(final_translated_txt)
-
-print('Overall, my error count: {}'.format(my_error_count))
+    for txt in final_translated_txt:
+        print("translate to: '{}'".format(txt))
