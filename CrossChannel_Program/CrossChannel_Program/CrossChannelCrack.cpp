@@ -1053,6 +1053,106 @@ void CrossChannelCrack::__2_Pack( string pFileName, string SourceFolder )
 	return;
 }
 
+// 集合各种特殊情况用于判断是否达到文本结尾
+// 不检测边界
+bool checkTail(char *FileContents, int i, int Size) {
+
+	return (
+
+		// 5个%N为内容的特殊情况，其结尾为：  00 41 0B 
+		(FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x41 && FileContents[i + 2] == (char)0x0B)
+
+		// %N结尾 25 4E 00 （存在多个%N的情况，这里只允许两个%N）
+		|| (FileContents[i] == (char)0x00 && FileContents[i - 1] == (char)0x4E && FileContents[i - 2] == (char)0x25 && FileContents[i - 5] != (char)0x4E)
+
+		// %WE结尾 25 57 45 00 (要除去后面还有%的情况)
+		|| (FileContents[i] == (char)0x00 && FileContents[i - 1] == (char)0x45 && FileContents[i - 2] == (char)0x57 && FileContents[i - 3] == (char)0x25)
+
+		// %FE结尾 25 46 45 00
+		|| (FileContents[i] == (char)0x00 && FileContents[i - 1] == (char)0x45 && FileContents[i - 2] == (char)0x46 && FileContents[i - 3] == (char)0x25)
+
+		//%O 结尾 25 4F 00
+		|| (FileContents[i] == (char)0x00 && FileContents[i - 1] == (char)0x4F && FileContents[i - 2] == (char)0x25)
+
+
+		// %W结尾 25 57 00 B6
+		|| (FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0xB6 && FileContents[i - 1] == (char)0x57 && FileContents[i - 2] == (char)0x25)
+
+		// %AE结尾 25 41 45 00
+		|| (FileContents[i] == (char)0x00 && FileContents[i - 1] == (char)0x45 && FileContents[i - 2] == (char)0x41 && FileContents[i - 3] == (char)0x25)
+
+
+		// %T500  25 54 35 30 30
+		|| (FileContents[i - 1] == (char)0x30 && FileContents[i - 2] == (char)0x30 && FileContents[i - 3] == (char)0x35 && FileContents[i - 4] == (char)0x54 && FileContents[i - 5] == (char)0x25)
+
+		// '  00 0F 27 00 
+		|| (FileContents[i] == (char)0x00 && FileContents[i - 1] == (char)0x27 && FileContents[i - 2] == (char)0x0F && FileContents[i - 3] == (char)0x00)
+
+		// 」 81 76 00 49
+		|| (FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x49 && FileContents[i - 1] == (char)0x76 && FileContents[i - 2] == (char)0x81)
+
+		// 特殊情况 、 00 41 66 00
+		|| (FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x41 && FileContents[i + 2] == (char)0x66 && FileContents[i + 3] == (char)0x00)
+
+		// 特殊情况  8   01 38 00 00
+		|| (FileContents[i - 2] == (char)0x01 && FileContents[i - 1] == (char)0x38 && FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x00)
+
+		// 特殊情况 <!> 00 0F 00 00
+		|| (FileContents[i - 2] == (char)0x00 && FileContents[i - 1] == (char)0x0F && FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x00)
+
+		// 特殊情况 ) 00 0F 01 29
+		|| (FileContents[i - 4] == (char)0x00 && FileContents[i - 3] == (char)0x0F && FileContents[i - 2] == (char)0x01 && FileContents[i - 1] == (char)0x29)
+
+		// 00 41 3E 00
+		|| (FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x41 && FileContents[i + 2] == (char)0x3E && FileContents[i + 3] == (char)0x00)
+
+
+		// 00 0B 09 00
+		|| (FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x0B && FileContents[i + 2] == (char)0x09 && FileContents[i + 3] == (char)0x00)
+
+		// 特殊情况(在英文句子Artificial Intelligence Operating system后直接出现，并且文本之后还有两个Artificial Intelligence Operating system) 
+		// 00 0B 00 00 03
+		|| (FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x0B && FileContents[i + 2] == (char)0x00 && FileContents[i + 3] == (char)0x00 && FileContents[i + 4] == (char)0x03)
+
+
+		// 00 0B 1D 00
+
+		|| (FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x0B && FileContents[i + 2] == (char)0x1D && FileContents[i + 3] == (char)0x00)
+
+		// 00 41 36 00 AA28文本的ENTER PASSWORD	
+
+		|| (FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0x41 && FileContents[i + 2] == (char)0x36 && FileContents[i + 3] == (char)0x00)
+
+		// 00 E5 00 41
+
+		|| (FileContents[i] == (char)0x00 && FileContents[i + 1] == (char)0xE5 && FileContents[i + 2] == (char)0x00 && FileContents[i + 3] == (char)0x41)
+
+		);
+}
+// 用于将utf16编码的字符串转化为wstring
+std::wstring UTF16StringLineToWstring(std::string utf16line)
+{
+	std::wstring result = L"";
+	for (int i = 0; i < utf16line.length() - 1; i += 2)
+	{
+		unsigned char c1 = utf16line[i];
+		unsigned char c2 = utf16line[i + 1];
+		unsigned short wc;
+		if (c2 == 0)
+		{
+			wc = c1;
+		}
+		else
+		{
+			wc = c2;
+			wc = wc << 8;
+			wc += c1;
+		}
+		result += wc;
+	}
+	return result;
+}
+
 void CrossChannelCrack::__3_Decrypt( string InputFolder )
 {
 	_01_CreateFolder( "temp" );//生成临时文件夹
@@ -1156,8 +1256,10 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 					}
 					continue;
 				}
-				else if (i + 3 < Size && FileContents[i] == TextTail[0] &&
-					FileContents[i + 1] == TextTail[1]) {
+				else if (
+					(Flag != NULL && i + 3 < Size && FileContents[i] == TextTail[0] && FileContents[i + 1] == TextTail[1])
+					|| (Flag != NULL && checkTail(FileContents, i, Size))
+					) {
 					//文本尾部，注意保存及换行
 					Flag = NULL;
 					i += 1;//可以跳过去了
@@ -1289,6 +1391,7 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 				InFile.close( );
 				
 				EasyUnicodeFileLE ULE;
+				ifstream New_Txt_Stream;//存放译文的临时变量
 #ifdef CROSSCHANNEL
 				RealSaveToFolder[ strlen( RealSaveToFolder ) - 3 ] = 'C';
 				RealSaveToFolder[ strlen( RealSaveToFolder ) - 2 ] = 'C';
@@ -1303,6 +1406,16 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 				RealSaveToFolder[strlen(RealSaveToFolder) - 3] = 'I';
 				RealSaveToFolder[strlen(RealSaveToFolder) - 2] = 'O';
 				RealSaveToFolder[strlen(RealSaveToFolder) - 1] = 'S'; // IOS
+
+				
+				// 译文文件InputFolder应当于InputFolder下
+				string temp = FileNameHeader + string(TempSave);
+				temp.at(temp.length() - 3) = 'T';
+				temp[temp.length() - 2] = 'X';
+				temp[temp.length() - 1] = 'T';
+				// 打开译文文件
+				New_Txt_Stream.open(temp, ios::in | ios::binary);
+
 #endif
 				ULE.open( RealSaveToFolder, ios_base::trunc | ios_base::out );
 				wstring TempTargetFileULE;
@@ -1363,11 +1476,55 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 						TempTargetFileULE += res;
 						if (ULEChoiceCount) TempTargetFileULE += L">1●选项" + TB.StringToWstring(936, TB.IntToString(ULEChoiceCount)) + L"●";
 						else TempTargetFileULE += Sign2;
-						TempTargetFileULE += res;
+
+						// 添加第二行
+						//为空则添加原文
+						// New_Txt_Stream.eof()||(UINT)New_Txt_Stream.tellg()==0
+						if (New_Txt_Stream.eof()) {
+							TempTargetFileULE += res;
+						}
+						else {
+							//添加译文
+							const int clength = 3;
+							char cc[clength] = { '\0' };/*当前读入的字符*/
+							char pc[clength] = { '\0' };/*当前的前驱的字符*/
+							string line = "";
+
+							while (New_Txt_Stream.read(cc, clength - 1))
+							{	/*一次读入两个字节*/
+								line += cc[0];
+								line += cc[1];
+								if ((pc[0] == '\x0d') && (pc[1] == '\x00')
+									&& (cc[0] == '\x0a') && (cc[1] == '\x00'))
+								{
+									/*换行符标志*/
+									/*Unicode文件的字节流转换为宽字符*/
+									std::wstring wstr = UTF16StringLineToWstring(line);
+
+									//这里除去\r\n中的\r,只留下\n，否则EasyUnicodeFileLE的write会让文本结尾多了一个/r
+									wchar_t temp_char = wstr.at(wstr.length() - 1);
+									wstr.pop_back();
+									wstr.pop_back();
+									wstr += temp_char;
+
+									TempTargetFileULE += wstr;
+
+									break;
+								}
+								else if (cc[0] == '\xff' && cc[1] == '\xfe') {
+									// 出去new_txt中多余的FF FE 魔数(大端UTF16的BOM)
+									line.pop_back();
+									line.pop_back();
+								}
+								strcpy(pc, cc);/*保存当前两个字符的前驱字符*/
+								memset(cc, sizeof(char), clength);
+							}
+						}
 					//}
 				}
 				ULE.write( TempTargetFileULE );
 				ULE.close( );
+				New_Txt_Stream.close();
 			}
 			else {
 				cout << "  -> None Text." << endl;
@@ -1517,7 +1674,22 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 							tempContent[ index + j ] = 0xA1;
 							tempContent[ ( ++ index ) + j ] = 0xA1;
 						}
-
+#ifdef IOREVISION 						
+						// 用于跳转到tip的转义字符，其后面的数字编号不能被转码
+						else if (str[j] == '%') {
+							//跳过非文本的值
+							while (str[j] < 0x80) {
+								tempContent[index + j] = str[j];
+								j++;
+								if (j >= str.length()) {
+									pLogFile.writeln(L"[ " + TB.StringToWstring(936, tempFileName) + L" ] [ line: "
+										+ TB.StringToWstring(936, TB.IntToString(LineCount))
+										+ L" ] endline in “" + TB.StringToWstring(936, str) + L"”");
+									break;
+								}
+							}
+						}
+#endif
 						// Exceptions
 						else if( j + 1 < str.length( ) && str[ j ] == '\\' && str[ j + 1 ] == 'n' ) {
 							tempContent[ index + j ] = str[ j ];
@@ -1705,8 +1877,8 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 		char Sign = 0x00; // 在while里面有解释
 		while( i < tempLen ) {
 			while( i < tempLen ) { // 找可替换的部分
-				if( i + 2 < tempLen && tempWSCFileContent[ i ] == 0x00 && tempWSCFileContent[ i + 1 ] == TextHeader
-					&& tempWSCFileContent[ i + 2 ] != 0x00 ) { Sign = 'a'; break; } // 初步判断是文本
+				if( i + 2 < tempLen && tempWSCFileContent[ i ] == 0x00 && tempWSCFileContent[ i + 1 ] == TextHeader) 
+				{ Sign = 'a'; break; } // 初步判断是文本
 #ifdef CROSSCHANNEL // Cross Channel
 				else if( i > 1 && i + 10 < tempLen && tempWSCFileContent[ i ] == 0x01 && tempWSCFileContent[ i - 1 ] == 0x00
 					&& (   tempWSCFileContent[ i + 1 ] == 0x52 && tempWSCFileContent[ i + 8 ] == 0x01
@@ -1743,21 +1915,43 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 			cLine ++;
 			switch( Sign ) {
 			case 'a': // 粗略判断是文本开头
-				for (int k = 0; k < 2; k++) WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝判断过的3个字节
-				if( tempWSCFileContent[ i ] == TextHeader ) { //cerr << "4<" << cLine <<"> "; // 这个是有人名的正文
+				for (int k = 0; k < 2; k++) WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝判断过的3（2）个字节
+
+				// 这里为空行的特殊情况 16进制为00 0F 00 00 
+				// 以及 '  00 0F 27 00 的情况
+				// 特殊情况 <!> 00 0F 00 00	
+				// 特殊情况 ) 00 0F 01 29
+				// 直接使用原文即可
+				if ((tempWSCFileContent[i] == 0x00 && tempWSCFileContent[i + 1] == 0x00)
+					|| (tempWSCFileContent[i] == 0x27 && tempWSCFileContent[i + 1] == 0x00)
+					|| (tempWSCFileContent[i] == 0x00 && tempWSCFileContent[i + 1] == 0x00)
+					|| (tempWSCFileContent[i] == 0x01 && tempWSCFileContent[i + 1] == 0x29)
+					// 多个%N
+					|| (tempWSCFileContent[i] == 0x25 && tempWSCFileContent[i + 1] == 0x4E)
+					) {
+					string temp; getline(gFile, temp, '\n');
+					break;
+				}
+
+				//有人名
+				if (tempWSCFileContent[i] == TextHeader) { //cerr << "4<" << cLine <<"> "; // 这个是有人名的正文
 					WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 补一个TextHeader
 					unsigned int index = 0;
-					string temp; getline( gFile, temp, '\n' );
-					cout << endl << "[a." << temp << "]";
+					string temp; getline(gFile, temp, '\n');
+					cout << "[a." << temp << "]";
 					//cerr << "1 ";
-					while( temp[ index ++ ] != '[' ) { } // 找人名开头标记，找到后index会加一跳出
-					while (temp[index] != ']') {
+					//这里无边界检测
+					//[ 的16进制
+					while (temp[index++] != '\x5b') {}
+					// 找人名开头标记，找到后index会加一跳出
+					// ]的16进制
+					while (temp[index] != '\x5d') {
 						WSCFileContent_CHS[OutLen].srcChar = temp[index++];
 						WSCFileContent_CHS[OutLen++].srcPos = 0;
 
 						//WSCFileContent_CHS[OutLen++] = temp[index++]; // 人名就复制过去了
 					}
-					index ++; // 跳掉 ]
+					index++; // 跳掉 ]
 					//cerr << "2 ";
 					WSCFileContent_CHS[OutLen].srcPos = 0;
 					WSCFileContent_CHS[OutLen++].srcChar = 0x00; // 补一个0x00
@@ -1777,9 +1971,50 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 						//WSCFileContent_CHS[OutLen++] = temp[index++]; // 句子复制过去
 					}
 				}
-				while (!(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'K')) i++;
-				//cerr << "3 ";
-				for (int k = 0; k < 2; k++) WSCFileContent_CHS[OutLen++] = srcchar[i++]; // 拷贝 %K
+				//特殊情况 参照checkTail函数
+				//没有做边界检测
+				while (
+					// 特殊标记结尾的特征
+					!(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'K')
+
+					&& !(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'N')
+
+					// %WE结尾  25 57 45 00
+					&& !(tempWSCFileContent[i] == (char)0x00 && tempWSCFileContent[i - 1] == (char)0x45 && tempWSCFileContent[i - 2] == (char)0x57 && tempWSCFileContent[i - 3] == (char)0x25)
+					// %FE结尾 25 46 45 00
+					&& !(tempWSCFileContent[i] == (char)0x00 && tempWSCFileContent[i - 1] == (char)0x45 && tempWSCFileContent[i - 2] == (char)0x46 && tempWSCFileContent[i - 3] == (char)0x25)
+					// %O 结尾  25 4F 00	
+					&& !(tempWSCFileContent[i] == (char)0x00 && tempWSCFileContent[i - 1] == (char)0x4F && tempWSCFileContent[i - 2] == (char)0x25)
+					// %W结尾  25 57 00 B6
+					&& !(tempWSCFileContent[i] == (char)0x00 && tempWSCFileContent[i + 1] == (char)0xB6 && tempWSCFileContent[i - 1] == (char)0x57 && tempWSCFileContent[i - 2] == (char)0x25)
+					// %AE结尾 25 41 45 00
+					&& !(tempWSCFileContent[i] == (char)0x00 && tempWSCFileContent[i - 1] == (char)0x45 && tempWSCFileContent[i - 2] == (char)0x41 && tempWSCFileContent[i - 3] == (char)0x25)
+					// %T500  25 54 35 30 30
+					&& !(tempWSCFileContent[i - 1] == (char)0x30 && tempWSCFileContent[i - 2] == (char)0x30 && tempWSCFileContent[i - 3] == (char)0x35 && tempWSCFileContent[i - 4] == (char)0x54 && tempWSCFileContent[i - 5] == (char)0x25)
+					// 」 81 76 00 49	
+					&& !(tempWSCFileContent[i] == (char)0x00 && tempWSCFileContent[i + 1] == (char)0x49 && tempWSCFileContent[i - 1] == (char)0x76 && tempWSCFileContent[i - 2] == (char)0x81)
+					// 特殊情况 、 00 41 66 00
+					&& !(tempWSCFileContent[i] == (char)0x00 && tempWSCFileContent[i + 1] == (char)0x41 && tempWSCFileContent[i + 2] == (char)0x66 && tempWSCFileContent[i + 3] == (char)0x00)
+					// 特殊情况  8   01 38 00 00
+					&& !(tempWSCFileContent[i - 2] == (char)0x01 && tempWSCFileContent[i - 1] == (char)0x38 && tempWSCFileContent[i] == (char)0x00 && tempWSCFileContent[i + 1] == (char)0x00)
+
+
+
+					// 特殊文本结尾的特征
+					// 00 41 36 00
+					&& !(tempWSCFileContent[i] == 0 && tempWSCFileContent[i + 1] == 0x41 && tempWSCFileContent[i + 2] == 0x36 && tempWSCFileContent[i + 3] == 0)
+					// 00 41 3E 00
+					&& !(tempWSCFileContent[i] == 0 && tempWSCFileContent[i + 1] == 0x41 && tempWSCFileContent[i + 2] == 0x3E && tempWSCFileContent[i + 3] == 0)
+					// 00 0B 09 00
+					&& !(tempWSCFileContent[i] == 0 && tempWSCFileContent[i + 1] == 0x0B && tempWSCFileContent[i + 2] == 0x09 && tempWSCFileContent[i + 3] == 0)
+					// 00 0B 1D 00
+					&& !(tempWSCFileContent[i] == 0 && tempWSCFileContent[i + 1] == 0x0B && tempWSCFileContent[i + 2] == 0x1D && tempWSCFileContent[i + 3] == 0)
+					// 00 E5 00 41
+					&& !(tempWSCFileContent[i] == 0 && tempWSCFileContent[i + 1] == 0xE5 && tempWSCFileContent[i + 2] == 0x00 && tempWSCFileContent[i + 3] == 0x41)
+					// 00 0B 00 00 03
+					&& !(tempWSCFileContent[i] == 0 && tempWSCFileContent[i + 1] == 0x0B && tempWSCFileContent[i + 2] == 0x00 && tempWSCFileContent[i + 3] == 0x00 && tempWSCFileContent[i + 4] == 0x03)
+					) i++;
+				
 				break;
 
 			case 'b': // 判断是选项的结尾
