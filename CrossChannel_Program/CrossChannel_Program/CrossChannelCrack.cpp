@@ -1295,9 +1295,20 @@ void CrossChannelCrack::__3_Decrypt( string InputFolder )
 #endif
 #ifdef IOREVISION
 				// I/O revision II
-				else if (i > 2 && i + 7 < Size && FileContents[i] == 0x00 && FileContents[i - 1] == 0x00
-					&& FileContents[i + 1] == 0x01 && FileContents[i + 2] == 0x00 && FileContents[i + 3] == 0x03
-					&& FileContents[i + 4] == 0x01 && FileContents[i + 5] == 0x07 && FileContents[i + 6] == 0x00) {
+				else if (i > 2 && i + 7 < Size && FileContents[i - 1] == 0x00 && 
+					
+					(
+						(FileContents[i] == 0x00 && FileContents[i + 1] == 0x01) ||
+						(FileContents[i] == 0x01 && FileContents[i + 1] == 0x7B) ||
+						(FileContents[i] == 0x01 && FileContents[i + 1] == 0x7C) ||
+						(FileContents[i] == 0x01 && FileContents[i + 1] == 0x7D) ||
+						(FileContents[i] == 0x01 && FileContents[i + 1] == 0x7E) 
+					)
+
+					&& FileContents[i + 2] == 0x00 && FileContents[i + 3] == 0x03
+					&& FileContents[i + 4] == 0x01 && FileContents[i + 5] == 0x07 && FileContents[i + 6] == 0x00) 
+				
+				{
 					//选项结尾
 #endif
 
@@ -1689,6 +1700,12 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 								}
 							}
 						}
+						// 全角字符的高位
+						//else if(str[j] == 0)
+						//{
+						//	tempContent[index + j] = str[j+1]-128;
+						//	j++;
+						//}
 #endif
 						// Exceptions
 						else if( j + 1 < str.length( ) && str[ j ] == '\\' && str[ j + 1 ] == 'n' ) {
@@ -1899,9 +1916,23 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 #endif
 #ifdef IOREVISION // I/O revision II
 					// TODO: double check this
-				else if (i > 2 && i + 7 < tempLen && tempWSCFileContent[i] == 0x00 && tempWSCFileContent[i - 1] == 0x00
-					&& tempWSCFileContent[i + 1] == 0x01 && tempWSCFileContent[i + 2] == 0x00 && tempWSCFileContent[i + 3] == 0x03
-					&& tempWSCFileContent[i + 4] == 0x01 && tempWSCFileContent[i + 5] == 0x07 && tempWSCFileContent[i + 6] == 0x00) {
+				//else if (i > 2 && i + 7 < tempLen && tempWSCFileContent[i] == 0x00 && tempWSCFileContent[i - 1] == 0x00
+				//	&& tempWSCFileContent[i + 1] == 0x01 && tempWSCFileContent[i + 2] == 0x00 && tempWSCFileContent[i + 3] == 0x03
+				//	&& tempWSCFileContent[i + 4] == 0x01 && tempWSCFileContent[i + 5] == 0x07 && tempWSCFileContent[i + 6] == 0x00) 
+				else if (i > 2 && i + 7 < tempLen && tempWSCFileContent[i - 1] == 0x00 &&
+
+					(
+					(tempWSCFileContent[i] == 0x00 && tempWSCFileContent[i + 1] == 0x01) ||
+						(tempWSCFileContent[i] == 0x01 && tempWSCFileContent[i + 1] == 0x7B) ||
+						(tempWSCFileContent[i] == 0x01 && tempWSCFileContent[i + 1] == 0x7C) ||
+						(tempWSCFileContent[i] == 0x01 && tempWSCFileContent[i + 1] == 0x7D) ||
+						(tempWSCFileContent[i] == 0x01 && tempWSCFileContent[i + 1] == 0x7E)
+						)
+
+					&& tempWSCFileContent[i + 2] == 0x00 && tempWSCFileContent[i + 3] == 0x03
+					&& tempWSCFileContent[i + 4] == 0x01 && tempWSCFileContent[i + 5] == 0x07 && tempWSCFileContent[i + 6] == 0x00)
+
+				{
 					//选项结尾
 #endif
 					Sign = 'b'; break; // 判断是选项的结尾
@@ -1932,6 +1963,10 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 					string temp; getline(gFile, temp, '\n');
 					break;
 				}
+				// 将文本BA08的特殊情况排除，这里不需要句子，因为没有提取到
+				if (tempWSCFileContent[i] == 0x00) {
+					break;
+				}
 
 				//有人名
 				if (tempWSCFileContent[i] == TextHeader) { //cerr << "4<" << cLine <<"> "; // 这个是有人名的正文
@@ -1946,6 +1981,21 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 					// 找人名开头标记，找到后index会加一跳出
 					// ]的16进制
 					while (temp[index] != '\x5d') {
+						//if (temp[index] == 163)
+						//{
+						//	temp[++index] -= 128;
+						//	WSCFileContent_CHS[OutLen].srcChar = temp[index++];
+						//}
+						//else if (temp[index] > 163) 
+						//{
+						//	WSCFileContent_CHS[OutLen].srcPos = 0;
+						//	WSCFileContent_CHS[OutLen++].srcChar = temp[index++];
+						//	WSCFileContent_CHS[OutLen].srcChar = temp[index++];
+						//}
+						//else 
+						//{
+						//	WSCFileContent_CHS[OutLen].srcChar = temp[index++];
+						//}
 						WSCFileContent_CHS[OutLen].srcChar = temp[index++];
 						WSCFileContent_CHS[OutLen++].srcPos = 0;
 
@@ -1977,7 +2027,7 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 					// 特殊标记结尾的特征
 					!(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'K')
 
-					&& !(tempWSCFileContent[i] == '%' && tempWSCFileContent[i + 1] == 'N')
+					&& !(tempWSCFileContent[i - 2] == '%' && tempWSCFileContent[i - 1] == 'N'  && tempWSCFileContent[i] == (char)0x00)
 
 					// %WE结尾  25 57 45 00
 					&& !(tempWSCFileContent[i] == (char)0x00 && tempWSCFileContent[i - 1] == (char)0x45 && tempWSCFileContent[i - 2] == (char)0x57 && tempWSCFileContent[i - 3] == (char)0x25)
@@ -2047,8 +2097,10 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 		// change offsets
 		for (int i = 0; i + 5 < OutLen; i++) {
 			if (WSCFileContent_CHS[i].srcChar == 0x00 && WSCFileContent_CHS[i + 1].srcChar == 0x06
-				&& !( WSCFileContent_CHS[i + 2].srcChar == 0x00 && WSCFileContent_CHS[i + 3].srcChar == 0x00
-				&& WSCFileContent_CHS[i + 4].srcChar == 0x00 && WSCFileContent_CHS[i + 5].srcChar == 0x00 ) ) {
+				&& !( WSCFileContent_CHS[i + 2].srcChar == 0x00 && WSCFileContent_CHS[i + 3].srcChar == 0x00 
+					&& WSCFileContent_CHS[i + 4].srcChar == 0x00 && WSCFileContent_CHS[i + 5].srcChar == 0x00
+				 ) ) {
+				// 
 				// i + 2 --> offset begin
 				// fetch value
 				unsigned int originalPos;
@@ -2082,8 +2134,10 @@ void CrossChannelCrack::__4_Encrypt( string OriginalUnpackFolder, string PureScr
 		
 		// DEC Write
 		pFile.open( ( PureScriptFolder + "\\WSC_DEC\\" + tempFileName ).c_str( ), ios::out | ios::trunc | ios::binary );
-		for (int i = 0; i < OutLen; i++)
+		for (int i = 0; i < OutLen; i++) 
+		{
 			pFile.write((char *)&(WSCFileContent_CHS[i].srcChar), 1);
+		}
 		//pFile.write( WSCFileContent_CHS, OutLen );
 		pFile.close( );
 
