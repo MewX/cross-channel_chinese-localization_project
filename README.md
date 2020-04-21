@@ -1,4 +1,6 @@
 # CROSS†CHANNEL 中文化（汉化）项目
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMewX%2Fcross-channel_chinese-localization_project.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMewX%2Fcross-channel_chinese-localization_project?ref=badge_shield)
+
 这里是 CROSS†CHANNEL 中文化（汉化）项目的 [`网站`](http://crosschannel.cn/) 和`程序源代码`。
 
 目前我们完成的是“CROSS†CHANNEL 复刻版”的汉化工作，
@@ -188,3 +190,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMewX%2Fcross-channel_chinese-localization_project.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FMewX%2Fcross-channel_chinese-localization_project?ref=badge_large)
