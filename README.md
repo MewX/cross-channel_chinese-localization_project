@@ -191,6 +191,5 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-
-## License
+## Open Source License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMewX%2Fcross-channel_chinese-localization_project.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FMewX%2Fcross-channel_chinese-localization_project?ref=badge_large)
