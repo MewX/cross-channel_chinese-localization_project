@@ -31,11 +31,6 @@ jQuery(function($) {
 		var $spy = $(this).scrollspy('refresh')
 	})
 
-	//PrettyPhoto
-	$("a.preview").prettyPhoto({
-		social_tools: false
-	});
-
 	//Isotope
 	$(window).load(function(){
 		$portfolio = $('.portfolio-items');
