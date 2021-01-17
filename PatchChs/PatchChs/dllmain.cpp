@@ -298,9 +298,10 @@ PATCH_TEST:
 	// patch
 	f_test = fopen( "UninstallChs.exe", "rb" );
 	if( f_test == NULL ) {
-		if (MessageBoxW(((ImgInfo *)pvParam)->h, L"玩家的错误: 我找不到UninstallChs.exe了。\r\n是否转到我们汉化版的官方网站重新下载？\r\n(http://www.crosschannel.cn)\r\n\r\n点击“取消”可以采用兼容模式运行。",
-			COMMON_DLG_TITLE, MB_OKCANCEL) == IDOK) {
-			ShellExecuteA(NULL, "open", "http://www.crosschannel.cn", NULL, NULL, SW_SHOWNORMAL);
+		if (MessageBoxW(((ImgInfo *)pvParam)->h, L"玩家的错误: 我找不到UninstallChs.exe了。\r\n是否转到我们汉化版的官方网站重新下载？\r\n(https://www.crosschannel.games)\r\n\r\n点击“取消”可以采用兼容模式运行。",
+						COMMON_DLG_TITLE, MB_OKCANCEL) == IDOK)
+		{
+			ShellExecuteA(NULL, "open", "https://www.crosschannel.games", NULL, NULL, SW_SHOWNORMAL);
 			ExitProcess(0);
 		}
 		else

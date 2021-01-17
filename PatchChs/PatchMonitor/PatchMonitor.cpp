@@ -464,8 +464,8 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 			WinExec( "cmd /c del CROSSCHANNEL_v0.992.exe", SW_HIDE );
 #endif
 
-			MessageBoxW( NULL, L"卸载完毕，很干净的哦！~ 我们会想你的~~\r\n再来光顾一下http://crosschannel.cn吧~~\r\n哦对了，如果这个卸载程序没有自删除还请手动删除一下~", L"卸载完毕", MB_OK );
-			ShellExecuteA(NULL, "open", "http://www.crosschannel.cn", NULL, NULL, SW_SHOWNORMAL);
+			MessageBoxW(NULL, L"卸载完毕，很干净的哦！~ 我们会想你的~~\r\n再来光顾一下 https://crosschannel.games 吧~~\r\n哦对了，如果这个卸载程序没有自删除还请手动删除一下~", L"卸载完毕", MB_OK);
+			ShellExecuteA(NULL, "open", "https://www.crosschannel.games", NULL, NULL, SW_SHOWNORMAL);
 
 			// Delete self
 			char    buf[MAX_PATH];

@@ -1,7 +1,7 @@
 # CROSS†CHANNEL 中文化（汉化）项目
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMewX%2Fcross-channel_chinese-localization_project.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMewX%2Fcross-channel_chinese-localization_project?ref=badge_shield)
 
-这里是 CROSS†CHANNEL 中文化（汉化）项目的 [`网站`](http://crosschannel.cn/) 和`程序源代码`。
+这里是 CROSS†CHANNEL 中文化（汉化）项目的 [`网站`](https://crosschannel.games/) 和`程序源代码`。
 
 目前我们完成的是“CROSS†CHANNEL 复刻版”的汉化工作，
 ~2016年我们的任务是“CROSS†CHANNEL -Final Complete-”，“2017-2018年我们的任务是“少女们向荒野进发”。~
@@ -169,7 +169,7 @@
 
 ### Website @gh-pages
 
-这个就是 http://crosschannel.cn 的网站啦，静态的没错，不过感谢GitHub提供服务器。
+这个就是 https://crosschannel.games 的网站啦，静态的没错，不过感谢GitHub提供服务器。
 
 ## Contributors
 
