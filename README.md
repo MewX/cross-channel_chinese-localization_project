@@ -14,22 +14,22 @@
 
 ### CROSS†CHANNEL 复刻版 v0.99 汉化补丁 @2015-03
 
-> **都督&程序：**MewX<br/>
-> **最终校对：**牙刷<br/>
-> **全文校对：**烬、牙刷<br/>
-> **全文翻译：**白崎穣、坂田铜时、Eruption、Haven、黑须太2、刘阿斗、荔枝蝉、旅之灵夫2、
+> **都督&程序：** MewX<br/>
+> **最终校对：** 牙刷<br/>
+> **全文校对：** 烬、牙刷<br/>
+> **全文翻译：** 白崎穣、坂田铜时、Eruption、Haven、黑须太2、刘阿斗、荔枝蝉、旅之灵夫2、
 > MarieL、姆Q的酱油瓶、秋田大学萝莉同好会会员甲、ScorpioAres、网特很多要HX、雅米多<br/>
-> **图片编辑：**Revo<br/>
-> **ＥＤ翻译：**kuon、牙刷、月山冥<br/>
-> **ＥＤ字幕：**蝉猫<br/>
-> **技术测试：**Chemstrike、Dandirion Aria、dxcayj、面皮贵、samidare、腽肭<br/>
+> **图片编辑：** Revo<br/>
+> **ＥＤ翻译：** kuon、牙刷、月山冥<br/>
+> **ＥＤ字幕：** 蝉猫<br/>
+> **技术测试：** Chemstrike、Dandirion Aria、dxcayj、面皮贵、samidare、腽肭<br/>
 >
-> **全平台移植：**fk1995<br/>
+> **全平台移植：** fk1995<br/>
 >
-> **程序协力：**夏侯飛燕<br/>
-> **润色协力：**八矢夜乌、凤玄音、陌上初月、欺诈师RL、蚊子<br/>
-> **翻译协力：**迟来的星、DDS、misaka10032、shamal0324、soul、童话karas、“田中ロミオ”<br/>
-> **其他协力：**博士的逆袭、苍梓、了望的猪猪、妹控雪<br/>
+> **程序协力：** 夏侯飛燕<br/>
+> **润色协力：** 八矢夜乌、凤玄音、陌上初月、欺诈师RL、蚊子<br/>
+> **翻译协力：** 迟来的星、DDS、misaka10032、shamal0324、soul、童话karas、“田中ロミオ”<br/>
+> **其他协力：** 博士的逆袭、苍梓、了望的猪猪、妹控雪<br/>
 >
 > **鸣谢：（按时间顺序）**<br/>
 > 希_ver、灵缡心 - 提供了在澄空发帖所需kx；<br/>
@@ -47,7 +47,7 @@
 
 > 首先是文件包结构，均采用某商业单文件打包器打包。
 
-> **CROSSCHANNEL_v0.99.exe**
+##### CROSSCHANNEL_v0.99.exe
 - imgs/
   - CROSS+CHANNEL.jpg
   - pb_basic.png
@@ -77,7 +77,7 @@
 - Rio+.chs
 - size_list.lst
 
-> **UninstallChs.exe**
+##### UninstallChs.exe
 - textpack.bin
 - main.exe
 
