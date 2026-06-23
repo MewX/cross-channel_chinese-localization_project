@@ -12,7 +12,13 @@
 
 ## 阅前提示
 
+最终打包使用的 renpy 工程参见 [Intro1997/cross-channel_chinese-localization_project/Release](https://github.com/Intro1997/cross-channel_chinese-localization_project/releases) 下的 `CROSSxChannel.zip`，
+
 本方案虽然没有进行任何资源相关的改动，但未经完整测试，如果在构建、安装以及游玩时遇到任何问题，请在本 repo 中提交 issue，并 [@Intro1997](https://github.com/Intro1997) 协助，感谢您的支持和理解！
+
+### 已修复的问题
+
+1. 修复：带有语音播放的对话因为 hash 值错位导致无法显示汉化内容。
 
 ## 准备工作
 
@@ -102,6 +108,35 @@ fix_icon_safe_zone("your_source_icon.png", "icon.png")
 
 3. 将 archive.rpa 内解压的所有文件，也就是 `CrossChannel/resources` 下的所有文件复制到 `CrossChannel/game` 文件夹下，包括 `icon.png`，若没有该文件，则无法运行 apk（Android studio debug 的时候会不断提示缺少 icon.png 这或许是源代码内的资源校验逻辑）。
    然后删除 archive.rpa 和 `CrossChannel/resources` 文件夹
+
+4. 重替换汉化脚本
+   因未知原因导致重新构建后，会出现带有脚本内语音播放的对话 hash 值与真实值不一致的问题
+   例如
+
+```rpy
+translate simplified_chinese cca0002_fc8c6ddc:
+
+    # voice "vmcca0002sku000"
+    # 桜庭 "『このＮＥＷチャリで峠を制覇してみせる。これって、今の俺には必要なことだと思うから』"
+    voice "vmcca0002sku000"
+    樱庭 "‘用这台ＮＥＷ自行车称霸山顶。现在这个目标对我万分重要。’"
+```
+
+这里的 cca0002_fc8c6ddc 不正确。这个问题不建议自行解决，比较麻烦，可以直接使用 [Intro1997/cross-channel_chinese-localization_project/Release](https://github.com/Intro1997/cross-channel_chinese-localization_project/releases) 编译 android 版本。如果你感兴趣，下面是解决这个问题的方法：
+
+注意：进行该操作之前，需要备份 tl 文件夹（用于后续填充翻译），接着可以直接删除 tl 文件夹；否则 renpy 遇到已经存在的文件时，只会增量更新，若原先存在的翻译对应的 hash 不正确，不会更新该 hash，因为该翻译已经完成，且被需要。
+
+该 hash 值由 renpy 引擎生成，通过
+
+<img width="912" height="740" alt="Image" src="./readme_images/renpy_gen_translate.png" />
+
+生成翻译，语言名称为生成的翻译框架脚本文件存储位置，如 simplified_chinese，则文件存在于 `game/tl/simplified_chinese`
+
+<img width="912" height="740" alt="Image" src="./readme_images/renpy_gen_translate_config.png" />
+
+生成翻译框架脚本后，我写了个 py 脚本，用来 copy 框架脚本内正确的 hash 值到之前备份的 tl 翻译脚本文件中，感兴趣可以参考[script_hash_fixer](./tools/script_hash_fixer.py)。
+
+替换完成后，将 `tl` 拷贝进 game 目录下即可
 
 ## 构建
 
