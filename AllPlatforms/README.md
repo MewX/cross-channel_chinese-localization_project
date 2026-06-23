@@ -12,7 +12,7 @@
 
 ## 阅前提示
 
-最终打包使用的 renpy 工程参见 [Release](https://github.com/Intro1997/cross-channel_chinese-localization_project/releases) 下的 `CROSSxChannel.zip`，
+最终打包使用的 renpy 工程参见 [Intro1997/cross-channel_chinese-localization_project/Release](https://github.com/Intro1997/cross-channel_chinese-localization_project/releases) 下的 `CROSSxChannel.zip`，
 
 本方案虽然没有进行任何资源相关的改动，但未经完整测试，如果在构建、安装以及游玩时遇到任何问题，请在本 repo 中提交 issue，并 [@Intro1997](https://github.com/Intro1997) 协助，感谢您的支持和理解！
 
@@ -122,7 +122,7 @@ translate simplified_chinese cca0002_fc8c6ddc:
     樱庭 "‘用这台ＮＥＷ自行车称霸山顶。现在这个目标对我万分重要。’"
 ```
 
-这里的 cca0002_fc8c6ddc 不正确。这个问题不建议自行解决，比较麻烦，可以直接使用 [Release](https://github.com/Intro1997/cross-channel_chinese-localization_project/releases) 编译 android 版本。如果你感兴趣，下面是解决这个问题的方法：
+这里的 cca0002_fc8c6ddc 不正确。这个问题不建议自行解决，比较麻烦，可以直接使用 [Intro1997/cross-channel_chinese-localization_project/Release](https://github.com/Intro1997/cross-channel_chinese-localization_project/releases) 编译 android 版本。如果你感兴趣，下面是解决这个问题的方法：
 
 注意：进行该操作之前，需要备份 tl 文件夹（用于后续填充翻译），接着可以直接删除 tl 文件夹；否则 renpy 遇到已经存在的文件时，只会增量更新，若原先存在的翻译对应的 hash 不正确，不会更新该 hash，因为该翻译已经完成，且被需要。
 
