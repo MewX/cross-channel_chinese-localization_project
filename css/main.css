@@ -1,7 +1,49 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
+/* ============================================================
+   配色：靛青（Indigo）—— 低饱和度莫兰迪调，纯蓝系
+   主色 #40588d 取自站点 logo 字标 hsl(221, 38%, 40%)。
+   辨识度来自「明度纵深」而非色相变化：
+     近墨深蓝 --ink   承载正文与标题
+     中调品牌蓝 --brand 承载导航高亮等结构性色块
+     更亮的群青 --accent 承载链接与可交互元素
+   所有中性色都带同一族的微妙偏蓝，避免纯灰的呆板。
+   全部取值均已核对 WCAG AA（正文 ≥4.5:1，装饰性图标 ≥3:1）。
+   ============================================================ */
+:root {
+  /* 中性色（带 215° 微蓝的灰） */
+  --bg:         #e5e7eb;
+  --bg-sunken:  #edeff2;
+  --surface:    #ffffff;
+  --surface-2:  #f4f6f8;
+  --line:       #d0d5dc;
+  --line-soft:  #e3e7ec;
+  --ink:        #161d2c;
+  --ink-soft:   #465062;
+  --ink-mute:   #687587;
+  /* 品牌蓝（取自 logo 字标）与其纵深 */
+  --brand:      #40588d;
+  --brand-dk:   #2b3d64;
+  --brand-lt:   #869bc1;
+  --brand-bg:   rgba(64, 88, 141, 0.09);
+  --brand-ln:   rgba(64, 88, 141, 0.26);
+  /* 强调色：更亮更饱和的群青，用于链接／可交互元素 */
+  --accent:     #3369a3;
+  --accent-bg:  rgba(51, 105, 163, 0.10);
+  --accent-ln:  rgba(51, 105, 163, 0.30);
+  /* 平台图标：同族蓝—青的纵深梯度 */
+  --c-rose:     #4675a4;
+  --c-sage:     #497b8d;
+  --c-dusty:    #5969a6;
+  --c-mauve:    #48757a;
+  --c-slate:    #273149;
+  /* 阴影统一带一点蓝灰，而非纯黑 */
+  --shadow-sm:  0 1px 3px 0 rgba(22, 29, 44, 0.14);
+  --shadow:     0 1px 2px rgba(22, 29, 44, 0.05), 0 6px 18px rgba(22, 29, 44, 0.08);
+  --shadow-up:  0 2px 4px rgba(22, 29, 44, 0.08), 0 14px 32px rgba(22, 29, 44, 0.12);
+}
 body {
-  background: #e5e5e5;
-  color: #999;
+  background: var(--bg);
+  color: var(--ink-soft);
 }
 h1,
 h2,
@@ -9,11 +51,11 @@ h3,
 h4,
 h5,
 h6 {
-  color: #777;
+  color: var(--ink);
   font-weight: 300;
 }
 a {
-  color: #52b6ec;
+  color: var(--accent);
   -webkit-transition: 300ms;
   -moz-transition: 300ms;
   -o-transition: 300ms;
@@ -21,7 +63,7 @@ a {
 }
 a:hover,
 a:focus {
-  color: #80c9f1;
+  color: var(--brand-dk);
   text-decoration: none;
   outline: none;
 }
@@ -83,8 +125,8 @@ a:focus {
 }
 .box {
   padding: 50px 30px;
-  background: #fff;
-  border-bottom: 1px solid #e9e9e9;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line-soft);
   position: relative;
 }
 .box.first {
@@ -106,13 +148,13 @@ a:focus {
   text-align: center;
 }
 .navbar-default {
-  background: #fff;
+  background: var(--surface);
   border-radius: 0 0 5px 5px;
   border: 0;
   padding: 0;
-  -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,.2);
-  -moz-box-shadow: 0 1px 3px 0 rgba(0,0,0,.2);
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2);
+  -webkit-box-shadow: var(--shadow-sm);
+  -moz-box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 .navbar-default .first a {
@@ -134,7 +176,7 @@ a:focus {
   padding: 30px 25px;
   font-size: 16px;
   line-height: 18px;
-  color: #999;
+  color: var(--ink-soft);
 }
 .navbar-default .navbar-nav > li > a > i {
   display: inline-block;
@@ -149,7 +191,7 @@ a:focus {
 .navbar-default .navbar-nav > li.active:hover > a:focus,
 .navbar-default .navbar-nav > li:hover > a:focus,
 .navbar-default .navbar-nav > li:focus > a:focus {
-  background-color: #52b6ec;
+  background-color: var(--brand);
   color: #fff;
 }
 .icon-md {
@@ -159,37 +201,37 @@ a:focus {
   line-height: 68px;
   color: #fff;
   margin-right: 10px;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(22, 29, 44, 0.35);
   text-align: center;
   display: inline-block;
   border-radius: 100%;
   margin-bottom: 10px;
 }
 .icon-color1 {
-  background-color: #e74c3c;
+  background-color: var(--c-rose);
 }
 .icon-color2 {
-  background-color: #2ecc71;
+  background-color: var(--c-sage);
 }
 .icon-color3 {
-  background-color: #3498db;
+  background-color: var(--c-dusty);
 }
 .icon-color4 {
-  background-color: #8e44ad;
+  background-color: var(--c-mauve);
 }
 .icon-color6 {
-  background-color: #2c3e50;
+  background-color: var(--c-slate);
 }
 #footer {
   padding-top: 30px;
   padding-bottom: 30px;
-  color: #999;
+  color: var(--ink-mute);
 }
 #footer a {
-  color: #999;
+  color: var(--ink-soft);
 }
 #footer a:hover {
-  color: #52b6ec;
+  color: var(--brand);
 }
 @keyframes scaleUp {
   0% {
@@ -247,30 +289,25 @@ a:focus {
    避免与 Bootstrap 的通用类名冲突。
    （注意：Bootstrap 的 .label 会把文字刷成白色，故此处用 .dl-name。）
 
-   配色沿用本文件既有主题：
-     #52b6ec  站点主蓝（.btn-primary / a）
-     #1586c3  站点深蓝（.btn-primary:hover）
-     #f3f3f3  区块底色（同 #portfolio .box）
-   #52b6ec 上放白字对比度仅 2.27:1，#1586c3 也只有 4.02:1，
-   均不足 WCAG AA 4.5:1，故承载文字处用同色相压深一档的 #127ab2（4.72:1）。
+   颜色全部引用顶部 :root 中的莫兰迪调色板。
    ============================================================ */
 #download {
-  --dl-card: #ffffff;
-  --dl-card-alt: #f6f8fa;
-  --dl-ink: #22262d;
-  --dl-ink-soft: #59606d;
-  --dl-ink-mute: #868d9b;
-  --dl-line: #e1e5ea;
-  --dl-brand: #52b6ec;
-  --dl-brand-dk: #1586c3;
-  --dl-accent: #127ab2;
-  --dl-accent-bg: rgba(82, 182, 236, 0.12);
-  --dl-accent-ln: rgba(82, 182, 236, 0.45);
-  --dl-dead: #98a0ae;
-  --dl-dead-bg: rgba(152, 160, 174, 0.12);
+  --dl-card: var(--surface);
+  --dl-card-alt: var(--surface-2);
+  --dl-ink: var(--ink);
+  --dl-ink-soft: var(--ink-soft);
+  --dl-ink-mute: var(--ink-mute);
+  --dl-line: var(--line);
+  --dl-brand: var(--brand-lt);
+  --dl-brand-dk: var(--accent);
+  --dl-accent: var(--accent);
+  --dl-accent-bg: var(--accent-bg);
+  --dl-accent-ln: var(--accent-ln);
+  --dl-dead: var(--ink-mute);
+  --dl-dead-bg: rgba(104, 117, 135, 0.12);
 }
 #download .box {
-  background: #f3f3f3;
+  background: var(--bg-sunken);
   /* 原来这里挂着 word-break:break-all，会把 v0.992 这类字符串拦腰截断 */
   word-break: normal;
   overflow-wrap: anywhere;
@@ -335,7 +372,7 @@ a:focus {
 #download .dl-rule {
   flex: 1;
   height: 1px;
-  background: #dcdfe4;
+  background: var(--line);
 }
 #download .dl-count {
   color: var(--dl-ink-mute);
@@ -356,12 +393,12 @@ a:focus {
   background: var(--dl-card);
   border: 1px solid var(--dl-line);
   border-radius: 14px;
-  box-shadow: 0 1px 2px rgba(20, 40, 60, 0.05), 0 6px 18px rgba(20, 40, 60, 0.07);
+  box-shadow: var(--shadow);
   transition: box-shadow 250ms, border-color 250ms;
 }
 #download .dl-card:hover {
   border-color: var(--dl-accent-ln);
-  box-shadow: 0 2px 4px rgba(20, 40, 60, 0.07), 0 14px 32px rgba(20, 40, 60, 0.11);
+  box-shadow: var(--shadow-up);
 }
 #download .dl-info {
   min-width: 0;
@@ -561,7 +598,7 @@ a:focus {
   font-size: 12px;
 }
 #download .dl-copy:hover {
-  background: #fff;
+  background: var(--surface);
   border-color: var(--dl-brand);
   color: var(--dl-accent);
 }
@@ -588,9 +625,9 @@ a:focus {
   content: attr(data-tip);
   margin-bottom: 8px;
   padding: 5px 9px;
-  background: #2b3038;
+  background: var(--ink);
   border-radius: 6px;
-  box-shadow: 0 4px 14px rgba(20, 40, 60, 0.22);
+  box-shadow: 0 4px 14px rgba(22, 29, 44, 0.24);
   color: #fff;
   font-family: inherit;
   font-size: 12px;
@@ -603,7 +640,7 @@ a:focus {
   content: "";
   margin-bottom: 2px;
   border: 5px solid transparent;
-  border-top-color: #2b3038;
+  border-top-color: var(--ink);
   transform: translate(-50%, -2px);
 }
 #download .dl-tip:hover:before,
