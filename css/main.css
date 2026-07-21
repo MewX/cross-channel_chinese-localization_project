@@ -123,7 +123,9 @@ a:focus {
   margin-left: 20px;
   width: 200px;
   height: 78px;
-  background: url(../images/logo.png) no-repeat 0 50%;
+  background: url(../images/logo.2_waifu2x_art_noise3_scale.png) no-repeat 0 50%;
+  /* 图片实际为 400×156 的 2 倍图，缩放到 1 倍尺寸显示，高分屏下更清晰 */
+  background-size: 200px 78px;
 }
 .navbar-default .navbar-nav > li {
   margin-left: 1px;
