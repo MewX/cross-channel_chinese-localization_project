@@ -817,11 +817,6 @@ a:focus {
   z-index: 1;
   border-radius: 14px;
 }
-/* 卡片内的其它链接要浮在热区之上，否则会被整卡链接盖住 */
-.cc-card p a {
-  position: relative;
-  z-index: 2;
-}
 /* 右上角的外链角标，与下载区镜像方块的做法一致 */
 .cc-act {
   position: absolute;
