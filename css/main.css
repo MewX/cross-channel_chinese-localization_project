@@ -1070,3 +1070,48 @@ a:focus {
     grid-row: 2;
   }
 }
+
+/* ---- 页脚 ---- */
+#footer {
+  padding: 0 0 44px;
+  color: var(--ink-mute);
+  text-align: center;
+}
+.cc-footer {
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+.cc-footer p {
+  margin: 0;
+}
+.cc-footer-main {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.9;
+}
+/* 原来用 <u> 加下划线，换成可控的下边框 */
+.cc-footer-main a {
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--brand-ln);
+  transition: color 180ms, border-color 180ms;
+}
+.cc-footer-main a:hover,
+.cc-footer-main a:focus {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.cc-footer-sub {
+  margin-top: 5px !important;
+  font-size: 12.5px;
+  letter-spacing: 0.05em;
+}
+/* 统计脚本注入的计数图标，压低存在感 */
+.cc-footer-stats {
+  margin-top: 16px;
+  opacity: 0.7;
+}
+.cc-footer-stats img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
