@@ -125,10 +125,14 @@
                 <div class="dl">
                     <div class="dl-notice">
                         <i class="icon-info-sign"></i>
-                        <div>
-                            <b>2021.02.10 更新</b> —— 网站全面迁移到 .games 国际域名，不用担心国内域名炸了之类的了；
+                        <div class="dl-notice-list">
+                            <p><b>2026.07.21 更新</b> —— 网站全面翻新；新增由
+                            <a href="https://github.com/FeiWenT" target="_blank" rel="noopener"><b>黄白猫花花</b></a>
+                            贡献的 Steam 版汉化补丁；全平台移植版更新了版本号 —— 现已有可在最新版 Android 上运行的 APK，感谢
+                            <a href="https://github.com/Intro1997" target="_blank" rel="noopener"><b>Intro1997</b></a>。</p>
+                            <p><b>2021.02.10 更新</b> —— 网站全面迁移到 .games 国际域名，不用担心国内域名炸了之类的了；
                             更新了<a href="pc.14.06.15.html">序章汉化补丁</a>发布页面（因为<a href="http://crosschannel.blog.163.com/" target="_blank">网易博客</a>被关闭了）；
-                            更新了 GitHub、Google Drive 的全部链接，删除了过期的死链。
+                            更新了 GitHub、Google Drive 的全部链接，删除了过期的死链。</p>
                         </div>
                     </div>
 
@@ -156,6 +160,7 @@
          mirrors[].type: "link"（默认，跳转）/ "copy"（整块点击复制，不跳转）
          translationAvailable：true=已汉化 / false=未汉化 / 省略=不标注，排在最前
          pills：第一枚按版本号样式（强调色）渲染；tags：中性特性标签
+         mirrors[].links：方块内的附加链接按钮（如开源仓库）
          pass / unzip：enc = 需运行时解码，raw = 原页面本就是明文 */
       var GROUPS = [
         {
@@ -194,11 +199,22 @@
                 { label:"百度云 · Windows+Linux", icon:"icon-hdd",
                   note:"720P 高清版", dead:true }
               ]
+            },
+            {
+              title: "Steam 版汉化补丁",
+              platforms: ["windows"],
+              tags: ["爱好者贡献", "基于 PC v0.992", "AI 补译"],
+              blurb: "由爱好者 <strong>黄白猫花花</strong> 制作（非汉化组官方），适用于 Steam 上的英文 Final Complete 版。本组原版汉化中缺失的文本，在此版本中已由 AI 补译。",
+              mirrors: [
+                { label:"GitHub 云盘", icon:"icon-github",
+                  href:"https://github.com/FeiWenT/CrossChannelSteamEditionChineseLocalization/releases",
+                  links: [{ label:"GitHub 开源项目", href:"https://github.com/FeiWenT/CrossChannelSteamEditionChineseLocalization" }] }
+              ]
             }
           ]
         },
         {
-          title: "游戏本体",
+          title: "游戏本体 （不含汉化）",
           items: [
             {
               title: "CROSS†CHANNEL 复刻版",
@@ -219,7 +235,7 @@
             {
               title: "Steam 版",
               platforms: ["windows"],
-              translationAvailable: false,
+              translationAvailable: true,
               tags: ["已集成免密补丁"],
               blurb: "压缩包含 15% 恢复记录，可用于修复损坏文件。",
               mirrors: [
@@ -284,6 +300,15 @@
         }).join("") + '</div>';
       }
 
+      /* 镜像方块内的附加链接（如开源仓库），做成带边框的小按钮 */
+      function linksHTML(m) {
+        if (!m.links || !m.links.length) return "";
+        return '<div class="dl-links">' + m.links.map(function (l) {
+          return '<a class="dl-btn" href="' + esc(l.href) + '" target="_blank" rel="noopener">' +
+                 esc(l.label) + '<i class="icon-external-link"></i></a>';
+        }).join("") + '</div>';
+      }
+
       function mirrorHTML(m) {
         var note = m.note ? '<div class="dl-note">' + esc(m.note) + '</div>' : "";
 
@@ -309,7 +334,7 @@
                '<div class="dl-mirror-top"><i class="' + m.icon + ' dl-ico"></i>' +
                '<span class="dl-name">' + esc(m.label) + '</span>' +
                '<i class="icon-external-link dl-act"></i></div>' + note + '</a>' +
-               keysHTML(m) + '</div>';
+               keysHTML(m) + linksHTML(m) + '</div>';
       }
 
       function cardHTML(it) {
