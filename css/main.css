@@ -445,7 +445,8 @@ a:focus {
   font-weight: 600;
   white-space: nowrap;
 }
-#download .dl-pill.is-ver {
+#download .dl-pill.is-ver,
+#download .dl-pill.is-cn {
   background: var(--dl-accent-bg);
   border-color: transparent;
   color: var(--dl-accent);

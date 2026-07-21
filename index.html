@@ -150,6 +150,8 @@
 
       /* 全部下载项集中在这个数组里 —— 以后加镜像/改版本只动数据，不动结构
          mirrors[].type: "link"（默认，跳转）/ "copy"（整块点击复制，不跳转）
+         translationAvailable：true=已汉化 / false=未汉化 / 省略=不标注，排在最前
+         pills：第一枚按版本号样式（强调色）渲染；tags：中性特性标签
          pass / unzip：enc = 需运行时解码，raw = 原页面本就是明文 */
       var GROUPS = [
         {
@@ -197,6 +199,8 @@
             {
               title: "CROSS†CHANNEL 复刻版",
               platforms: ["windows"],
+              translationAvailable: true,
+              tags: ["已集成免密补丁"],
               mirrors: [
                 { label:"磁力链接", icon:"icon-magnet", type:"copy", note:"BT 种子",
                   value:"magnet:?xt=urn:btih:2DA70F28D63028816792AB71C7579C225ECA6815" },
@@ -211,8 +215,9 @@
             {
               title: "Steam 版",
               platforms: ["windows"],
-              rawGame: true,
-              blurb: "已集成免密补丁。压缩包含 15% 恢复记录，可用于修复损坏文件。",
+              translationAvailable: false,
+              tags: ["已集成免密补丁"],
+              blurb: "压缩包含 15% 恢复记录，可用于修复损坏文件。",
               mirrors: [
                 { label:"Google Drive", icon:"icon-cloud-download",
                   unzip:{raw:"CROSS-CHANNEL-20200328"},
@@ -222,7 +227,8 @@
             {
               title: "CROSS†CHANNEL -Final Complete-",
               platforms: ["windows"],
-              rawGame: true,
+              translationAvailable: false,
+              tags: ["已集成免密补丁"],
               blurb: "压缩包含 15% 恢复记录，可用于修复损坏文件。",
               mirrors: [
                 { label:"磁力链接", icon:"icon-magnet", type:"copy", note:"BT 种子",
@@ -235,7 +241,8 @@
             {
               title: "CROSS†CHANNEL 2003 原版",
               platforms: ["windows"],
-              rawGame: true,
+              translationAvailable: false,
+              tags: ["已集成免密补丁"],
               blurb: "完整版 + BT + 游戏解读（英文，带重译补丁）。压缩包含 15% 恢复记录。",
               mirrors: [
                 { label:"Google Drive", icon:"icon-cloud-download",
@@ -306,9 +313,17 @@
           return '<i class="' + PLAT[p] + '"></i>';
         }).join("");
 
-        var pills = (it.pills || []).map(function (p, i) {
+        /* 汉化状态排在最前；字段未定义时不显示（如补丁本身无需标注） */
+        var status = it.translationAvailable === undefined ? ""
+          : it.translationAvailable
+            ? '<span class="dl-pill is-cn">已汉化</span>'
+            : '<span class="dl-pill is-raw">未汉化</span>';
+
+        var pills = status + (it.pills || []).map(function (p, i) {
           return '<span class="dl-pill ' + (i === 0 ? "is-ver" : "") + '">' + esc(p) + '</span>';
-        }).join("") + (it.rawGame ? '<span class="dl-pill is-raw">未汉化</span>' : "");
+        }).join("") + (it.tags || []).map(function (t) {
+          return '<span class="dl-pill">' + esc(t) + '</span>';
+        }).join("");
 
         return '<div class="dl-card"><div class="dl-info">' +
                '<div class="dl-platforms">' + icons + '</div>' +
