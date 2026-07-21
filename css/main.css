@@ -350,6 +350,16 @@ a:focus {
   color: var(--dl-brand-dk);
   font-size: 16px;
 }
+/* 多条更新记录：最新的在最上面，旧的略微弱化并用细线分隔 */
+#download .dl-notice-list p {
+  margin: 0;
+}
+#download .dl-notice-list p + p {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--dl-accent-ln);
+  opacity: 0.78;
+}
 #download .dl-notice b {
   color: var(--dl-ink);
   font-weight: 600;
@@ -620,6 +630,43 @@ a:focus {
   border-color: var(--dl-brand);
   color: var(--dl-accent);
 }
+/* 镜像方块内的附加链接按钮（如开源仓库） */
+#download .dl-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+  padding-left: 26px;
+}
+#download .dl-btn {
+  position: relative;
+  z-index: 2;   /* 浮在 .dl-mirror-link:after 热区之上 */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--dl-card-alt);
+  border: 1px solid var(--dl-line);
+  border-radius: 7px;
+  color: var(--dl-accent);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 180ms, border-color 180ms;
+}
+#download .dl-btn:hover,
+#download .dl-btn:focus {
+  background: var(--dl-accent-bg);
+  border-color: var(--dl-accent-ln);
+  color: var(--dl-accent);
+}
+#download .dl-btn i {
+  font-size: 11px;
+  opacity: 0.55;
+}
+#download .dl-btn:hover i {
+  opacity: 1;
+}
+
 /* hover 提示气泡：说明该处可复制 */
 #download .dl-tip:before,
 #download .dl-tip:after {
