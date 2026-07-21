@@ -79,9 +79,9 @@ a:focus {
   background-image: url(../images/slider-bg.jpg);
   background-attachment: fixed;
   background-size: cover;
-  background-position: 50% 50%;
+  /* 原本这里连写了两条 background-position，后一条把前一条覆盖掉了 */
+  background-position: center top;
   background-repeat: no-repeat;
-  background-position: top;
   padding: 250px 0;
   color: #fff;
 }
@@ -118,11 +118,6 @@ a:focus {
   -ms-animation: scaleUp 400ms;
   animation: scaleUp 400ms;
 }
-#main-slider h1 {
-  font-size: 68px;
-  text-shadow: 0 3px rgba(0, 0, 0, 0.1);
-  color: #fff;
-}
 .box {
   padding: 50px 30px;
   background: var(--surface);
@@ -147,15 +142,28 @@ a:focus {
 .center {
   text-align: center;
 }
+/* 顶栏：滚到最顶部时完全透明，随下滑逐渐浮出白底与向下的投影。
+   --nav-p 由 js/main.js 按滚动距离写入（0 = 全透明，1 = 完全实底）。
+   若 JS 未执行，--nav-p 保持 0，顶栏透明但文字仍是深色，页面依旧可用。 */
 .navbar-default {
-  background: var(--surface);
+  --nav-p: 0;
+  background: rgba(255, 255, 255, var(--nav-p));
   border-radius: 0 0 5px 5px;
   border: 0;
   padding: 0;
-  -webkit-box-shadow: var(--shadow-sm);
-  -moz-box-shadow: var(--shadow-sm);
-  box-shadow: var(--shadow-sm);
+  /* 向下的投影，随滚动加深 —— 这就是「变暗」的部分 */
+  -webkit-box-shadow: 0 4px 20px rgba(22, 29, 44, calc(var(--nav-p) * 0.18));
+  box-shadow: 0 4px 20px rgba(22, 29, 44, calc(var(--nav-p) * 0.18));
+  -webkit-backdrop-filter: blur(calc(var(--nav-p) * 10px));
+  backdrop-filter: blur(calc(var(--nav-p) * 10px));
   overflow: hidden;
+}
+/* 手机端展开菜单时，顶栏必须是实底 —— 否则在页面顶端
+   （--nav-p 为 0）菜单会浮在首屏图上，完全看不清。
+   .is-open 由 js/main.js 监听 Bootstrap 的 collapse 事件后添加。 */
+.navbar-default.is-open {
+  background: var(--surface);
+  box-shadow: 0 4px 20px rgba(22, 29, 44, 0.18);
 }
 .navbar-default .first a {
   border-radius: 0 0 0 5px;
@@ -176,7 +184,8 @@ a:focus {
   padding: 30px 25px;
   font-size: 16px;
   line-height: 18px;
-  color: var(--ink-soft);
+  /* 透明状态下文字压在近白的首屏图上，故用最深的 --ink 保证对比度 */
+  color: var(--ink);
 }
 .navbar-default .navbar-nav > li > a > i {
   display: inline-block;
@@ -648,14 +657,420 @@ a:focus {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+/* Bootstrap 默认 768px 才收起导航，但本站导航项多、且有一条很长
+   （完整汉化文本、补丁源码、博客教程），约 1200px 以下就会换行错位。
+   这里把「收起成汉堡菜单」的断点整体提到 1200px。 */
+
+/* ============================================================
+   其余版块（首屏 / 简介 / Extra / 留言）
+   与 #download 同一套视觉语言：白卡片 + 细描边 + 柔和阴影，
+   颜色一律取自顶部 :root 靛青调色板。统一加 cc- 前缀避免与
+   Bootstrap 冲突。
+   ============================================================ */
+
+/* ---- 版块大标题：原来是 h1 + 内联 text-align，字重 300 偏轻 ---- */
+.cc-title {
+  margin: 0 0 34px;
+  color: var(--ink);
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+.cc-title:after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin: 14px auto 0;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+/* ---- 首屏 ---- */
+#main-slider {
+  position: relative;
+}
+/* 压一层渐变让白字可读；浓度由 --scrim 控制，
+   页面在最顶端时为 0（完全透明），向下滚动逐渐加深，
+   由页面底部的脚本按滚动距离实时写入。 */
+#main-slider:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(180deg, rgba(22, 29, 44, 0.32) 0%, rgba(22, 29, 44, 0.62) 100%);
+  opacity: var(--scrim, 0);
+  transition: opacity 120ms linear;
+  z-index: 0;
+  pointer-events: none;
+}
+#main-slider .container {
+  position: relative;
+  z-index: 1;
+}
+.cc-hero h1 {
+  margin: 0;
+  /* 原来是写死的 68px，窄屏会撑爆 */
+  font-size: clamp(30px, 7vw, 62px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: #fff;
+  /* 置顶时遮罩为 0，白字全靠这层阴影压住背景图 */
+  text-shadow: 0 1px 2px rgba(22, 29, 44, 0.55), 0 2px 22px rgba(22, 29, 44, 0.55);
+}
+.cc-hero .cc-sub {
+  margin: 16px 0 0;
+  font-size: clamp(14px, 2.2vw, 19px);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 2px rgba(22, 29, 44, 0.55), 0 2px 16px rgba(22, 29, 44, 0.5);
+}
+
+/* ---- 简介正文 ---- */
+.cc-prose {
+  max-width: 46em;
+  margin: 0 auto;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 2;
+}
+.cc-prose p {
+  margin: 0 0 14px;
+}
+.cc-prose p:first-child {
+  color: var(--ink);
+  font-size: 17px;
+}
+.cc-prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- 通用卡片（简介的「汉化发布」与 Extra 共用）---- */
+.cc-sub-title {
+  margin: 44px 0 20px;
+  color: var(--ink);
+  font-size: 19px;
+  font-weight: 700;
+  text-align: center;
+}
+.cc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.cc-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 26px 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: box-shadow 250ms, border-color 250ms, transform 250ms;
+}
+.cc-card:hover {
+  border-color: var(--accent-ln);
+  box-shadow: var(--shadow-up);
+  transform: translateY(-2px);
+}
+.cc-card .cc-icons {
+  margin-bottom: 6px;
+}
+.cc-card h3 {
+  margin: 6px 0 10px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.cc-card h3 a {
+  color: inherit;
+}
+.cc-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.8;
+}
+.cc-card img {
+  max-width: 72px;
+  height: auto;
+  margin-bottom: 4px;
+}
+/* 整卡可点：与下载区的镜像方块同一手法 */
+.cc-stretch:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  border-radius: 14px;
+}
+/* 卡片内的其它链接要浮在热区之上，否则会被整卡链接盖住 */
+.cc-card p a {
+  position: relative;
+  z-index: 2;
+}
+/* 右上角的外链角标，与下载区镜像方块的做法一致 */
+.cc-act {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  color: var(--ink-mute);
+  font-size: 15px;
+  opacity: 0.5;
+  transition: opacity 180ms, color 180ms;
+}
+.cc-card:hover .cc-act {
+  opacity: 1;
+  color: var(--accent);
+}
+/* 卡片内指向别处的次级链接：做成按钮，并各自带一个外链角标 */
+.cc-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 4px;
+}
+.cc-btn {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 180ms, border-color 180ms;
+}
+.cc-btn:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-ln);
+  color: var(--accent);
+}
+.cc-btn i {
+  font-size: 12px;
+  opacity: 0.55;
+}
+.cc-btn:hover i {
+  opacity: 1;
+}
+.cc-card:focus-within {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+/* 整卡链接的悬浮提示：说明这张卡片会跳到哪里 */
+.cc-tip:after {
+  content: attr(data-tip);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 20;
+  margin-top: 8px;
+  padding: 5px 10px;
+  background: var(--ink);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(22, 29, 44, 0.24);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -2px);
+  transition: opacity 160ms, transform 160ms;
+}
+.cc-tip:hover:after,
+.cc-tip:focus-within:after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ---- 感言：顺序有意义，故用单列列表，自上而下一目了然 ---- */
+.cc-quotes {
+  margin: 0;
+  padding: 2px 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+.cc-quote {
+  display: grid;
+  grid-template-columns: 8em 1fr;
+  gap: 18px;
+  margin: 0;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.cc-quote:last-child {
+  border-bottom: 0;
+}
+.cc-quote figcaption {
+  grid-column: 1;
+  grid-row: 1;
+  padding-top: 1px;
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.75;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.cc-quote blockquote {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+
+/* ---- 留言 ---- */
+.cc-comment {
+  margin-top: 8px;
+}
+.cc-comment-fallback {
+  display: block;
+  padding: 18px 20px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ============================================================
+   响应式断点：统一放在文件末尾，确保能覆盖上面的基础样式
+   （媒体查询本身不增加优先级，靠的是书写顺序）
+   ============================================================ */
+@media (max-width: 1199px) {
+  .navbar-default .navbar-header {
+    float: none;
+  }
+  .navbar-default .navbar-toggle {
+    display: block;
+    margin: 20px 16px 20px 0;
+    border-color: var(--line);
+  }
+  .navbar-default .navbar-toggle:hover,
+  .navbar-default .navbar-toggle:focus {
+    background-color: var(--surface-2);
+  }
+  .navbar-default .navbar-toggle .icon-bar {
+    background-color: var(--ink-soft);
+  }
+  .navbar-default .navbar-collapse {
+    border-top: 1px solid var(--line);
+    box-shadow: none;
+  }
+  .navbar-default .navbar-collapse.collapse {
+    display: none !important;
+  }
+  .navbar-default .navbar-collapse.collapse.in {
+    display: block !important;
+    overflow-y: auto !important;
+  }
+  .navbar-default .collapsing {
+    overflow: hidden !important;
+  }
+  .navbar-default .navbar-nav {
+    float: none !important;
+    margin: 0;
+  }
+  .navbar-default .navbar-nav > li {
+    float: none;
+    margin-left: 0;
+  }
+  .navbar-default .navbar-nav > li > a {
+    padding: 14px 20px;
+    line-height: 22px;
+  }
+}
 @media (max-width: 860px) {
+  #main-slider {
+    /* 移动端浏览器把 fixed 背景按视口尺寸计算，图会被放得过大，
+       改回 scroll 让它按元素自身尺寸铺，才是正常的缩放 */
+    background-attachment: scroll;
+    background-position: center center;
+    padding: 170px 0 120px;
+  }
   #download .dl-card {
     grid-template-columns: 1fr;
     gap: 24px;
   }
 }
+@media (max-width: 767px) {
+  /* 顶部留一条纯色，别让固定顶栏压在人物脸上：
+     第一层是背景图，只画在 content box 内（即让开上方内边距）；
+     第二层纯色铺满整个元素，充当那条留白的底。 */
+  #main-slider {
+    background-image: url(../images/slider-bg.jpg),
+      linear-gradient(var(--surface), var(--surface));
+    background-attachment: scroll, scroll;
+    background-origin: content-box, border-box;
+    background-clip: content-box, border-box;
+    background-size: cover, auto;
+    background-position: center center, 0 0;
+    background-repeat: no-repeat, no-repeat;
+    padding: 84px 0 0;
+  }
+  /* 遮罩也要让开顶部那条纯色，否则会把它压灰 */
+  #main-slider:after {
+    top: 84px;
+  }
+  .cc-hero {
+    padding: 54px 0 64px;
+  }
+  /* 手机上 200px 宽的 logo 太占地方 */
+  .navbar-default .navbar-brand {
+    width: 152px;
+    height: 60px;
+    margin-left: 12px;
+    margin-right: 0;
+    background-size: 152px 60px;
+  }
+  .navbar-default .navbar-toggle {
+    margin: 12px 12px 12px 0;
+  }
+}
 @media (max-width: 600px) {
   #download .dl-mirrors {
     grid-template-columns: 1fr;
+  }
+  .cc-quotes {
+    padding: 2px 18px;
+  }
+  .cc-quote {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .cc-quote figcaption {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: left;
+  }
+  .cc-quote blockquote {
+    grid-column: 1;
+    grid-row: 2;
   }
 }
