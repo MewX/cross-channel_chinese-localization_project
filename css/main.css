@@ -633,6 +633,52 @@ a:focus {
   border-color: var(--dl-brand);
   color: var(--dl-accent);
 }
+/* 更早的更新历史：默认折叠，免得把下载内容挤到屏幕外 */
+#download .dl-history {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--dl-accent-ln);
+}
+#download .dl-history summary {
+  display: inline-block;
+  color: var(--dl-accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+#download .dl-history summary::-webkit-details-marker {
+  display: none;
+}
+#download .dl-history summary:before {
+  content: "\25B8";
+  margin-right: 7px;
+  font-size: 11px;
+}
+#download .dl-history[open] summary:before {
+  content: "\25BE";
+}
+#download .dl-history ul {
+  margin: 12px 0 2px;
+  padding: 0;
+  list-style: none;
+}
+#download .dl-history li {
+  display: grid;
+  grid-template-columns: 6.6em 1fr;
+  gap: 14px;
+  padding: 3px 0;
+  font-size: 13px;
+  line-height: 1.75;
+}
+#download .dl-history li b {
+  color: var(--dl-ink-mute);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
 /* 镜像方块内的附加链接按钮（如开源仓库） */
 #download .dl-links {
   display: flex;
@@ -1107,6 +1153,13 @@ a:focus {
 @media (max-width: 600px) {
   #download .dl-mirrors {
     grid-template-columns: 1fr;
+  }
+  #download .dl-history li {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  #download .dl-history li b {
+    text-align: left;
   }
   .cc-quotes {
     padding: 2px 18px;
