@@ -76,13 +76,16 @@ a:focus {
   z-index: 99999;
 }
 #main-slider {
-  background-image: url(../images/slider-bg.jpg);
-  background-attachment: fixed;
+  background-image: url(../images/slider-bg-gemini-redraw.jpg);
+  /* 不用 background-attachment: fixed —— 那样 cover 是按「视口」算的，
+     而首屏本身只有 ~560px 高，结果只能看到图片最上面的一小条（全是天空）。
+     改成默认的 scroll 后，定位区域就是首屏元素自己，取景可控。 */
   background-size: cover;
-  /* 原本这里连写了两条 background-position，后一条把前一条覆盖掉了 */
-  background-position: center top;
+  /* 40% 把人物那一条（原图 24%~66% 处）框进可视区域 */
+  background-position: center 40%;
   background-repeat: no-repeat;
-  padding: 250px 0;
+  /* 加高到 ~660px，人物从头到脚才放得下 */
+  padding: 300px 0;
   color: #fff;
 }
 #main-slider .item {
@@ -1010,17 +1013,24 @@ a:focus {
   .navbar-default .navbar-header {
     float: none;
   }
+  /* 顶栏在页面顶端是透明的，按钮直接压在首屏图上，
+     所以给它一个实底 + 阴影，否则在亮色天空上几乎看不见。
+     34px 高，在 80px 的顶栏里上下各留 23px 才是居中。 */
   .navbar-default .navbar-toggle {
     display: block;
-    margin: 20px 16px 20px 0;
+    margin: 23px 16px 23px 0;
+    background-color: var(--surface);
     border-color: var(--line);
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(22, 29, 44, 0.18);
   }
   .navbar-default .navbar-toggle:hover,
   .navbar-default .navbar-toggle:focus {
     background-color: var(--surface-2);
+    border-color: var(--brand-lt);
   }
   .navbar-default .navbar-toggle .icon-bar {
-    background-color: var(--ink-soft);
+    background-color: var(--brand);
   }
   .navbar-default .navbar-collapse {
     border-top: 1px solid var(--line);
@@ -1051,9 +1061,6 @@ a:focus {
 }
 @media (max-width: 860px) {
   #main-slider {
-    /* 移动端浏览器把 fixed 背景按视口尺寸计算，图会被放得过大，
-       改回 scroll 让它按元素自身尺寸铺，才是正常的缩放 */
-    background-attachment: scroll;
     background-position: center center;
     padding: 170px 0 120px;
   }
@@ -1067,7 +1074,7 @@ a:focus {
      第一层是背景图，只画在 content box 内（即让开上方内边距）；
      第二层纯色铺满整个元素，充当那条留白的底。 */
   #main-slider {
-    background-image: url(../images/slider-bg.jpg),
+    background-image: url(../images/slider-bg-gemini-redraw.jpg),
       linear-gradient(var(--surface), var(--surface));
     background-attachment: scroll, scroll;
     background-origin: content-box, border-box;
@@ -1084,16 +1091,17 @@ a:focus {
   .cc-hero {
     padding: 54px 0 64px;
   }
-  /* 手机上 200px 宽的 logo 太占地方 */
+  /* 手机上 200px 宽的 logo 太占地方；
+     60px 高的 logo 在 80px 顶栏里上下各留 10px 才居中，
+     原来贴着顶边显得很挤 */
   .navbar-default .navbar-brand {
     width: 152px;
     height: 60px;
-    margin-left: 12px;
-    margin-right: 0;
+    margin: 10px 0 10px 14px;
     background-size: 152px 60px;
   }
   .navbar-default .navbar-toggle {
-    margin: 12px 12px 12px 0;
+    margin: 23px 14px 23px 0;
   }
 }
 @media (max-width: 600px) {
