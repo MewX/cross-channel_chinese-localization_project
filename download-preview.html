@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>下载 — 卡片式改版预览 | CROSS†CHANNEL</title>
+
+<!-- 只引用现有的图标字体，其余样式全部重写，用于展示改版后的目标效果 -->
+<link href="css/font-awesome.min.css" rel="stylesheet">
+
+<style>
+/* ============================================================
+   配色沿用站点现有主题（css/main.css）：
+     #52b6ec  站点主蓝（.btn-primary / a）
+     #1586c3  站点深蓝（.btn-primary:hover）
+     #e5e5e5  页面底色（body）
+     #fff     卡片底色（.box）
+   #52b6ec 色相 201°，与 logo 字标的 #007fff（210°）同族，二者协调。
+   注意：#52b6ec 上放白字对比度仅 2.27:1，#1586c3 也只有 4.02:1，
+   均不足 WCAG AA 4.5:1，故按钮填充改用同色相再压深一档的 #127ab2（4.72:1），
+   浅蓝本身保留用于描边、底纹、hover 等不承载文字的地方。
+   ============================================================ */
+:root {
+  --bg:        #e5e5e5;   /* 同 main.css body */
+  --card:      #ffffff;   /* 同 main.css .box */
+  --card-alt:  #f6f8fa;
+  --ink:       #22262d;   /* 正文：原 #999 对比度不足 */
+  --ink-soft:  #59606d;
+  --ink-mute:  #868d9b;
+  --line:      #e1e5ea;
+
+  --brand:     #52b6ec;   /* 站点主蓝，用于描边／底纹／图标 */
+  --brand-dk:  #1586c3;   /* 站点深蓝 */
+  --accent:    #127ab2;   /* 按钮填充＋链接文字，白字 4.72:1（AA 通过） */
+  --accent-dp: #0d6694;   /* 按钮 hover，6.28:1 */
+  --accent-bg: rgba(82, 182, 236, .12);
+  --accent-ln: rgba(82, 182, 236, .45);
+
+  --dead:      #98a0ae;
+  --dead-bg:   rgba(152, 160, 174, .12);
+
+  --radius:    14px;
+  --shadow:    0 1px 2px rgba(20,40,60,.05), 0 6px 18px rgba(20,40,60,.07);
+  --shadow-up: 0 2px 4px rgba(20,40,60,.07), 0 14px 32px rgba(20,40,60,.11);
+
+  /* 间距刻度：4 / 8 / 16 / 24 / 48 */
+  --s1: 4px; --s2: 8px; --s3: 16px; --s4: 24px; --s5: 48px;
+}
+
+/* ============================================================
+   基础排版 —— 关键：真正的中文字体栈
+   ============================================================ */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI",
+               "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  /* 原来的 word-break:break-all 会把 v0.992 这类字符串拦腰截断 */
+  overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1140px; margin: 0 auto; padding: var(--s5) var(--s4) 96px; }
+
+.page-head h1 {
+  margin: 0 0 var(--s4);
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  font-weight: 700;          /* 原来是 300，标题几乎没有重量 */
+  letter-spacing: -.02em;
+  line-height: 1.25;
+}
+
+/* 公告条：原来这段 2021 迁移说明是整节里最大的字号（h4 + 加粗） */
+.notice {
+  display: flex; gap: var(--s3);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-ln);
+  border-radius: var(--radius);
+  padding: var(--s3) var(--s4);
+  margin: 0 0 var(--s5);
+  font-size: .9rem; line-height: 1.7;
+  color: var(--ink-soft);
+}
+.notice .i { color: var(--brand-dk); font-size: 1.05rem; padding-top: 3px; }
+.notice b { color: var(--ink); font-weight: 600; }
+.notice a { color: var(--accent); }
+
+/* 分组标题 */
+.group { margin-top: var(--s5); }
+.group-head {
+  display: flex; align-items: baseline; gap: var(--s3);
+  margin-bottom: var(--s4);
+}
+.group-head h2 {
+  margin: 0; font-size: 1.35rem; font-weight: 700;
+  letter-spacing: -.01em; white-space: nowrap;
+}
+.group-head .rule { flex: 1; height: 1px; background: #d3d7dd; }
+.group-head .count { color: var(--ink-mute); font-size: .85rem; white-space: nowrap; }
+
+/* ============================================================
+   横向卡片：整行一张，左侧信息栏 + 右侧镜像区
+   ============================================================ */
+.cards { display: flex; flex-direction: column; gap: var(--s3); }
+
+.card {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: var(--s5);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--s4);
+  box-shadow: var(--shadow);
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.card:hover { box-shadow: var(--shadow-up); border-color: var(--accent-ln); }
+
+/* --- 左栏 --- */
+.card-info { min-width: 0; }
+.platforms {
+  display: flex; gap: 10px; align-items: center;
+  color: var(--brand); font-size: 1.45rem;
+  margin-bottom: var(--s2);
+}
+.card-info h3 {
+  margin: 0 0 10px;
+  font-size: 1.15rem; font-weight: 650; line-height: 1.4;
+  letter-spacing: -.01em;
+}
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.pill {
+  display: inline-flex; align-items: center;
+  font-size: .74rem; font-weight: 600;
+  padding: 3px 9px; border-radius: 999px;
+  background: var(--card-alt); color: var(--ink-soft);
+  border: 1px solid var(--line); white-space: nowrap;
+}
+.pill.ver  { background: var(--accent-bg); color: var(--accent); border-color: transparent; }
+.pill.raw  { background: var(--dead-bg);  color: var(--dead);   border-color: transparent; }
+
+.blurb { color: var(--ink-soft); font-size: .85rem; margin: 0; }
+.blurb strong { color: var(--ink); font-weight: 650; }
+
+/* --- 右栏：镜像方块，等宽等高对齐 --- */
+.mirrors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+  gap: var(--s2);
+  align-content: start;
+}
+
+/* 整块可点：链接型用 ::after 铺满，复制型整块监听点击 */
+.mirror {
+  position: relative;
+  display: flex; flex-direction: column;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.mirror.clickable { cursor: pointer; }
+.mirror.clickable:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-ln);
+  transform: translateY(-1px);
+}
+.mirror-link { text-decoration: none; color: inherit; display: block; }
+/* 铺满整块的热区，让整个卡片可点，同时保持 <a> 的语义与右键菜单 */
+.mirror-link::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: 10px; }
+.mirror:focus-within { outline: 2px solid var(--brand-dk); outline-offset: 2px; }
+
+.mirror-top {
+  display: flex; align-items: center; gap: 9px;
+  font-size: .87rem; font-weight: 600; line-height: 1.35;
+}
+.mirror-top .ico { font-size: 1rem; width: 17px; text-align: center; color: var(--ink-mute); flex: none; }
+.mirror-top .label { flex: 1; min-width: 0; }
+/* 右侧动作图标：外链为箭头，复制为统一的 icon-copy */
+.mirror-top .act { font-size: .95rem; color: var(--ink-mute); flex: none; opacity: .55; transition: opacity .18s ease; }
+.mirror.clickable:hover .mirror-top .act { opacity: 1; color: var(--accent); }
+.mirror .note {
+  font-size: .74rem; color: var(--ink-mute);
+  margin-top: 3px; padding-left: 26px;
+}
+.mirror .tag {
+  font-size: .67rem; font-weight: 600; padding: 2px 7px; border-radius: 999px;
+  background: var(--card-alt); color: var(--ink-mute);
+  border: 1px solid var(--line); flex: none;
+}
+
+
+.mirror.dead {
+  background: var(--dead-bg); border-color: transparent;
+  color: var(--dead); cursor: not-allowed;
+}
+.mirror.dead .ico { color: var(--dead); }
+.mirror.dead .label { text-decoration: line-through; }
+
+/* 解压密码 / 提取码 —— 值仍由脚本运行时异或还原，源码内无明文 */
+.keys { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; padding-left: 26px; }
+.copy {
+  position: relative; z-index: 2;   /* 浮在 .mirror-link::after 热区之上 */
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .72rem; letter-spacing: .02em; font-weight: 500;
+  background: var(--card-alt); color: var(--ink-soft);
+  border: 1px solid var(--line); border-radius: 7px;
+  padding: 3px 8px; cursor: pointer;
+  transition: all .18s ease;
+}
+.copy .k { opacity: .7; font-size: .68rem; }
+.copy .icon-copy { font-size: .78rem; opacity: .6; }
+.copy:hover { border-color: var(--brand); color: var(--accent); background: #fff; }
+.copy:hover .icon-copy { opacity: 1; }
+.copy.done { border-color: var(--brand); color: var(--accent); background: var(--accent-bg); }
+
+/* ---- hover 提示气泡：说明该处可复制 ---- */
+.tip::before, .tip::after {
+  position: absolute; left: 50%; bottom: 100%;
+  opacity: 0; pointer-events: none;
+  transition: opacity .16s ease, transform .16s ease;
+  z-index: 30;
+}
+.tip::before {
+  content: attr(data-tip);
+  transform: translate(-50%, -2px);
+  margin-bottom: 8px;
+  background: #2b3038; color: #fff;
+  font-family: inherit; font-size: .72rem; font-weight: 500;
+  letter-spacing: .02em; line-height: 1.4;
+  white-space: nowrap; border-radius: 6px; padding: 5px 9px;
+  box-shadow: 0 4px 14px rgba(20,40,60,.22);
+}
+.tip::after {
+  content: ""; transform: translate(-50%, -2px);
+  margin-bottom: 2px;
+  border: 5px solid transparent; border-top-color: #2b3038;
+}
+.tip:hover::before, .tip:hover::after,
+.tip:focus-visible::before, .tip:focus-visible::after {
+  opacity: 1; transform: translate(-50%, 0);
+}
+
+.foot-note {
+  margin-top: var(--s5); padding-top: var(--s4);
+  border-top: 1px solid #d3d7dd;
+  color: var(--ink-mute); font-size: .85rem;
+}
+.foot-note a { color: var(--accent); }
+
+@media (max-width: 860px) {
+  .card { grid-template-columns: 1fr; gap: var(--s4); }
+}
+@media (max-width: 600px) {
+  .wrap { padding: var(--s4) var(--s3) 64px; }
+  .mirrors { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="page-head">
+    <h1>下载</h1>
+  </div>
+
+  <div class="notice">
+    <i class="icon-info-sign i"></i>
+    <div>
+      <b>2021.02.10 更新</b> —— 网站全面迁移到 .games 国际域名，不用担心国内域名炸了之类的了；
+      更新了<a href="pc.14.06.15.html">序章汉化补丁</a>发布页面（因为网易博客被关闭了）；
+      更新了 GitHub、Google Drive 的全部链接，删除了过期的死链。
+    </div>
+  </div>
+
+  <div id="groups"></div>
+
+  <div class="foot-note">
+    BUG、反馈：<a href="#comment">下方评论区</a> 或 <a href="http://tieba.baidu.com/p/3648221580">百度贴吧</a> 留言
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   密码依旧保持异或编码存放，运行时才还原 —— 防爬虫，页面源码里没有明文。
+   编码串与原 index.html 中的完全一致（异或密钥 6）。
+   ============================================================ */
+const dec = s => Array.from(s, c => String.fromCharCode(6 ^ c.charCodeAt(0))).join("");
+
+/* ============================================================
+   全部下载项集中在这一个数组里 —— 以后加镜像/改版本只动数据，不动结构
+   mirrors[].type: "link"（默认，跳转）/ "copy"（整块点击复制，不跳转）
+   pass / unzip：enc = 需运行时解码，raw = 原页面本就是明文
+   ============================================================ */
+const GROUPS = [
+  {
+    title: "汉化补丁",
+    items: [
+      {
+        title: "CROSS†CHANNEL 复刻版 完整汉化补丁",
+        platforms: ["windows"],
+        pills: ["v0.992"],
+        blurb: "<strong>3</strong> 遍翻译，<strong>2</strong> 遍润色，100% 原汁原味。首创汉化补丁双语同步显示功能。",
+        mirrors: [
+          { label:"GitHub 云盘", icon:"icon-github",
+            href:"https://github.com/MewX/cross-channel_chinese-localization_project/releases/tag/v0.992.green" },
+          { label:"Google Drive", icon:"icon-cloud-download", note:"含序章补丁",
+            href:"https://drive.google.com/drive/folders/0B611FkWqc6iKfnJsUEN1dzlKalR2eTJPSWVjWFV1OVVEc2ZGT3NLVWZfWVlYbkd5ejhMUUk?resourcekey=0-Ac5gEwe4SK95eZLiZnXhjA&usp=sharing" }
+        ]
+      },
+      {
+        title: "全平台移植版",
+        platforms: ["windows","apple","android","linux"],
+        pills: ["v1.01", "基于 PC v0.992"],
+        blurb: "涵盖移动端与 PC 的全平台移植：Android + iOS + Windows + Linux + WebAssembly，自带双语切换。",
+        mirrors: [
+          { label:"GitHub 云盘", icon:"icon-github", note:"720p 高清版 + 普通版",
+            href:"https://github.com/MewX/cross-channel_chinese-localization_project/releases/tag/moved.v1.01.basedon.v0.99" },
+          { label:"Google Drive", icon:"icon-cloud-download", note:"720p 高清版 + 普通版",
+            href:"https://drive.google.com/drive/folders/1v9GT_zUANp-wzO_bHACuqvKPZ5sipHpG?usp=sharing" },
+          { label:"百度云 · Android", icon:"icon-hdd", note:"720P 高清版",
+            pass:{enc:"`2~s"}, href:"https://pan.baidu.com/s/1gg40gvx" },
+          { label:"百度云 · MacOS", icon:"icon-hdd", note:"720P 高清版",
+            pass:{enc:"h2m`"}, href:"https://pan.baidu.com/s/1o9sG8ki" },
+          { label:"百度云 · 全平台", icon:"icon-hdd", note:"普通版",
+            pass:{enc:"1ao3"}, href:"https://pan.baidu.com/s/1mgrCqJe" },
+          { label:"百度云 · Windows+Linux", icon:"icon-warning-sign",
+            note:"720P 高清版", dead:true }
+        ]
+      }
+    ]
+  },
+  {
+    title: "游戏本体",
+    items: [
+      {
+        title: "CROSS†CHANNEL 复刻版",
+        platforms: ["windows"],
+        mirrors: [
+          { label:"磁力链接", icon:"icon-magnet", type:"copy", note:"BT 种子",
+            value:"magnet:?xt=urn:btih:2DA70F28D63028816792AB71C7579C225ECA6815" },
+          { label:"百度网盘", icon:"icon-hdd",
+            pass:{enc:"p3t4"}, unzip:{enc:"ETIUU+ENGHHCJ+467>6761"},
+            href:"https://pan.baidu.com/s/1eROgZVs" },
+          { label:"Google Drive", icon:"icon-cloud-download",
+            unzip:{enc:"ETIUU+ENGHHCJ+467>6761"},
+            href:"https://drive.google.com/drive/folders/1UR8ihiPCSrwNS9RZjFWN_mG4vdQ2__1N?usp=sharing" }
+        ]
+      },
+      {
+        title: "Steam 版",
+        platforms: ["windows"],
+        rawGame: true,
+        blurb: "已集成免密补丁。压缩包含 15% 恢复记录，可用于修复损坏文件。",
+        mirrors: [
+          { label:"Google Drive", icon:"icon-cloud-download",
+            unzip:{raw:"CROSS-CHANNEL-20200328"},
+            href:"https://drive.google.com/drive/folders/1vyYjT0N3a92BGxppaYyTQpz1Wqoqx1wq?usp=sharing" }
+        ]
+      },
+      {
+        title: "CROSS†CHANNEL -Final Complete-",
+        platforms: ["windows"],
+        rawGame: true,
+        blurb: "压缩包含 15% 恢复记录，可用于修复损坏文件。",
+        mirrors: [
+          { label:"磁力链接", icon:"icon-magnet", type:"copy", note:"BT 种子",
+            value:"magnet:?xt=urn:btih:b4e50296cf3cdd04f04c044596a0be719983e661" },
+          { label:"Google Drive", icon:"icon-cloud-download",
+            unzip:{raw:"CROSS-CHANNEL-20200328"},
+            href:"https://drive.google.com/drive/folders/1GIWiV--WZpiaOK_pKtxW_ec7L-Wve5cG?usp=sharing" }
+        ]
+      },
+      {
+        title: "CROSS†CHANNEL 2003 原版",
+        platforms: ["windows"],
+        rawGame: true,
+        blurb: "完整版 + BT + 游戏解读（英文，带重译补丁）。压缩包含 15% 恢复记录。",
+        mirrors: [
+          { label:"Google Drive", icon:"icon-cloud-download",
+            unzip:{raw:"CROSS-CHANNEL-20200327"},
+            href:"https://drive.google.com/drive/folders/1i0rwS5ZFcBXn1DVzPsgH_fPRVV88cYhn?usp=sharing" }
+        ]
+      }
+    ]
+  }
+];
+
+const PLAT = {
+  windows:"icon-windows", apple:"icon-apple",
+  android:"icon-android", linux:"icon-linux"
+};
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* 取值：enc 走运行时解码，raw 为原本就公开的明文 */
+const val = f => f.enc !== undefined ? dec(f.enc) : f.raw;
+
+function keysHTML(m) {
+  const out = [];
+  if (m.pass)  out.push(["提取码", val(m.pass)]);
+  if (m.unzip) out.push(["解压密码", val(m.unzip)]);
+  if (!out.length) return "";
+  return `<div class="keys">` + out.map(([k, v]) =>
+    `<button class="copy tip" data-tip="点击复制${k}" data-v="${esc(v)}">
+       <span class="k">${k}</span>${esc(v)}<i class="icon-copy"></i>
+     </button>`
+  ).join("") + `</div>`;
+}
+
+function mirrorHTML(m) {
+  const note = m.note ? `<div class="note">${esc(m.note)}</div>` : "";
+
+  if (m.dead) {
+    return `<div class="mirror dead">
+      <div class="mirror-top"><i class="${m.icon} ico"></i>
+        <span class="label">${esc(m.label)}</span><span class="tag">已失效</span></div>
+      ${note}</div>`;
+  }
+
+  const cls = "mirror clickable";
+
+  /* 复制型（磁力链接）：整块点击即复制，不跳转、不新开页 */
+  if (m.type === "copy") {
+    return `<div class="${cls} tip copy-tile" data-tip="点击复制磁力链接" data-v="${esc(m.value)}"
+                 role="button" tabindex="0">
+      <div class="mirror-top"><i class="${m.icon} ico"></i>
+        <span class="label">${esc(m.label)}</span><i class="icon-copy act"></i></div>
+      ${note}${keysHTML(m)}
+    </div>`;
+  }
+
+  /* 链接型：<a> 用 ::after 铺满整块，整卡片可点 */
+  return `<div class="${cls}">
+      <a class="mirror-link" href="${esc(m.href)}" target="_blank" rel="noopener">
+        <div class="mirror-top"><i class="${m.icon} ico"></i>
+          <span class="label">${esc(m.label)}</span><i class="icon-external-link act"></i></div>
+        ${note}
+      </a>${keysHTML(m)}
+    </div>`;
+}
+
+function cardHTML(it) {
+  const icons = (it.platforms || []).map(p => `<i class="${PLAT[p]}"></i>`).join("");
+  const pills = [
+    ...(it.pills || []).map((p, i) =>
+      `<span class="pill ${i === 0 ? "ver" : ""}">${esc(p)}</span>`),
+    it.rawGame ? `<span class="pill raw">未汉化</span>` : ""
+  ].join("");
+
+  return `<div class="card">
+    <div class="card-info">
+      <div class="platforms">${icons}</div>
+      <h3>${esc(it.title)}</h3>
+      ${pills ? `<div class="pills">${pills}</div>` : ""}
+      ${it.blurb ? `<p class="blurb">${it.blurb}</p>` : ""}
+    </div>
+    <div class="mirrors">${(it.mirrors || []).map(mirrorHTML).join("")}</div>
+  </div>`;
+}
+
+document.getElementById("groups").innerHTML = GROUPS.map(g => `
+  <section class="group">
+    <div class="group-head">
+      <h2>${esc(g.title)}</h2>
+      <span class="rule"></span>
+      <span class="count">${g.items.length} 项</span>
+    </div>
+    <div class="cards">${g.items.map(cardHTML).join("")}</div>
+  </section>
+`).join("");
+
+/* ---- 复制：密码按钮 与 整块复制型镜像 共用一套反馈 ---- */
+function flash(el, msg) {
+  const tip = el.dataset.tip;
+  el.dataset.tip = msg;
+  el.classList.add("done");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.dataset.tip = tip; el.classList.remove("done"); }, 1500);
+}
+
+function doCopy(el) {
+  navigator.clipboard.writeText(el.dataset.v)
+    .then(() => flash(el, "已复制 ✓"))
+    .catch(() => flash(el, "复制失败，请手动选择"));
+}
+
+document.addEventListener("click", e => {
+  const btn = e.target.closest(".copy");
+  if (btn) { doCopy(btn); return; }
+  const tile = e.target.closest(".copy-tile");
+  if (tile) doCopy(tile);
+});
+
+/* 复制型镜像用的是 div[role=button]，需自行处理键盘操作 */
+document.addEventListener("keydown", e => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const tile = e.target.closest(".copy-tile");
+  if (!tile) return;
+  e.preventDefault();
+  doCopy(tile);
+});
+</script>
+</body>
+</html>
