@@ -57,7 +57,7 @@ screen say(who, what, side_image=None, two_window=False):
                             id "who"
                             xanchor 0.5
                             ypos 600-220+5
-                            xcenter 1+268/2
+                            xcenter 1+int(268/2)
                             language "eastasian"
                             size 23
                             color "fff"
@@ -1272,7 +1272,7 @@ screen omake(page=1):
                 for i in range((cgpage-1)*25,(cgpage)*25):
                     fixed:
                         xysize (105,88)
-                        add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*((i-cgpage*25+25)/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*((i-cgpage*25+25)/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
+                        add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*int((i-cgpage*25+25)/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*int((i-cgpage*25+25)/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
         else:
             grid 5 2:
                 spacing 0
@@ -1280,7 +1280,7 @@ screen omake(page=1):
                 for i in range((cgpage-1)*25,(cgpage-1)*25+9):
                     fixed:
                         xysize (105,88)
-                        add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*(((i-cgpage*25+25))/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*(((i-cgpage*25+25))/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
+                        add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*int(((i-cgpage*25+25))/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*int(((i-cgpage*25+25))/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
                 add Null()
     elif page == 2:
         default scenepage = 1
@@ -1419,7 +1419,7 @@ screen omake(page=1):
                         selected_idle "sys/bgm_buttonh (%d).png" %(i+1)
                         selected_hover "sys/bgm_buttonh (%d).png" %(i+1)
                         action [Stop("bgm"),mr.Play(filename="bgm/bgm%03d.ogg"%(i+1))]
-                        pos 77+227*(i/10),117+41*(i%10)
+                        pos 77+227*int(i/10),117+41*(i%10)
             else:
                 if persistent.fullclear:
                     imagebutton:
@@ -1428,7 +1428,7 @@ screen omake(page=1):
                         selected_idle "sys/bgm_buttonh (%d).png" %(i+1)
                         selected_hover "sys/bgm_buttonh (%d).png" %(i+1)
                         action [Stop("bgm"),mr.Play(filename="bgm/bgm%03d.ogg"%(i+1))]
-                        pos 77+227*(i/10),117+41*(i%10)
+                        pos 77+227*int(i/10),117+41*(i%10)
     use omake_top(page=page)
     use menu_bottom
     use shortcutkey

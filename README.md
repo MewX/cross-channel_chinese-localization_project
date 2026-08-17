@@ -183,6 +183,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/shuye02"><img src="https://avatars1.githubusercontent.com/u/22615765?v=4" width="100px;" alt=""/><br /><sub><b>Ye Shu</b></sub></a><br /><a href="https://github.com/MewX/cross-channel_chinese-localization_project/commits?author=shuye02" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/ddddyyyy"><img src="https://avatars1.githubusercontent.com/u/34983255?v=4" width="100px;" alt=""/><br /><sub><b>madyson</b></sub></a><br /><a href="#maintenance-ddddyyyy" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://github.com/Intro1997"><img src="https://github.com/Intro1997.png" width="100px;" alt=""/><br /><sub><b>Intro1997</b></sub></a><br /><a href="https://github.com/MewX/cross-channel_chinese-localization_project/issues?q=is%3Aopen%20is%3Aissue%20author%3AIntro1997" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/CcCc824"><img src="https://github.com/CcCc824.png" width="100px;" alt=""/><br /><sub><b>CcCc824</b></sub></a><br /><a href="https://github.com/MewX/cross-channel_chinese-localization_project/issues?q=is%3Aopen%20is%3Aissue%20mentions%3ACcCc824" title="userTesting">📓</a></td>
   </tr>
 </table>
 

@@ -138,9 +138,9 @@ translate simplified_chinese cca0002_fc8c6ddc:
 
 替换完成后，将 `tl` 拷贝进 game 目录下即可
 
-## 修复小数问题
+## 修复浮点数问题
 
-截止目前为止最新的 Ren'Py 版本（8.5.2）使用的 Python 语法已经和本游戏的 Ren'Py 有部分区别，使得小数的计算出现不一致：
+截止目前为止最新的 Ren'Py 版本（8.5.2）使用的 Python 语法已经和本游戏的 Ren'Py 有部分区别，使得浮点数的计算出现不一致：
 
 1. Python 2.x: `2/5 = 0`
 2. Python 3.x: `2/5 = 0.4`
@@ -155,7 +155,7 @@ translate simplified_chinese cca0002_fc8c6ddc:
 通过以下修改可以解决问题：
 
 - 角色名称问题
-`game/system/screens.rpy: 60`
+`system/screens.rpy: 60`
 
 ```python
 # OLD VERSION
@@ -165,7 +165,7 @@ translate simplified_chinese cca0002_fc8c6ddc:
 ```
 
 - 附加内容中 scene 缩略图问题 以及 遮挡问题
-`game/system/screens.rpy: 1275`
+`system/screens.rpy: 1275`
 ```python
 # OLD VERSION
       add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*((i-cgpage*25+25)/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*((i-cgpage*25+25)/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
@@ -173,7 +173,7 @@ translate simplified_chinese cca0002_fc8c6ddc:
       add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*int((i-cgpage*25+25)/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*int((i-cgpage*25+25)/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
 ```
 
-`game/system/screens.rpy: 1283`
+`system/screens.rpy: 1283`
 ```python
 # OLD VERSION
       add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*(((i-cgpage*25+25))/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*(((i-cgpage*25+25))/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
@@ -182,7 +182,7 @@ translate simplified_chinese cca0002_fc8c6ddc:
 ```
 
 - 附加内容 BGM 页面无任何 BGM 信息
-`game/system/screens.rpy: 1422`
+`system/screens.rpy: 1422`
 ```python
 # OLD VERSION
       pos 77+227*(i/10),117+41*(i%10)
@@ -190,7 +190,7 @@ translate simplified_chinese cca0002_fc8c6ddc:
       pos 77+227*int(i/10),117+41*(i%10)
 ```
 
-`game/system/screens.rpy: 1431`
+`system/screens.rpy: 1431`
 ```python
 # OLD VERSION
       pos 77+227*(i/10),117+41*(i%10)
