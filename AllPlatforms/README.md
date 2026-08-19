@@ -155,48 +155,51 @@ translate simplified_chinese cca0002_fc8c6ddc:
 通过以下修改可以解决问题：
 
 - 角色名称问题
-`system/screens.rpy: 60`
 
-```python
-# OLD VERSION
-      xcenter 1+268/2
-# NEW VERSION
-      xcenter 1+int(268/2)
-```
+    `system/screens.rpy: 60`
+
+    ```python
+    # OLD VERSION
+    xcenter 1+268/2
+    # NEW VERSION
+    xcenter 1+int(268/2)
+    ```
 
 - 附加内容中 scene 缩略图问题 以及 遮挡问题
-`system/screens.rpy: 1275`
-```python
-# OLD VERSION
-      add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*((i-cgpage*25+25)/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*((i-cgpage*25+25)/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
-# NEW VERSION
-      add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*int((i-cgpage*25+25)/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*int((i-cgpage*25+25)/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
-```
 
-`system/screens.rpy: 1283`
-```python
-# OLD VERSION
-      add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*(((i-cgpage*25+25))/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*(((i-cgpage*25+25))/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
-# NEW VERSION
-      add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*int(((i-cgpage*25+25))/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*int(((i-cgpage*25+25))/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
-```
+    `system/screens.rpy: 1275`
+    ```python
+    # OLD VERSION
+    add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*((i-cgpage*25+25)/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*((i-cgpage*25+25)/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
+    # NEW VERSION
+    add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*int((i-cgpage*25+25)/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*((i-cgpage*25+25)%5))+"x"+str(112+88*int((i-cgpage*25+25)/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
+    ```
+
+    `system/screens.rpy: 1283`
+    ```python
+    # OLD VERSION
+    add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*(((i-cgpage*25+25))/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*(((i-cgpage*25+25))/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
+    # NEW VERSION
+    add g.make_button(button_list[i], "sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+1)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*int(((i-cgpage*25+25))/5))+"y.bmp",hover_border = At(Image("sys/CG_P"+str(cgpage)+"G_WIP+0"+"%02d"%((i-cgpage*25+25)+26)+"+"+str(82+105*(((i-cgpage*25+25))%5))+"x"+str(112+88*int(((i-cgpage*25+25))/5))+"y.bmp"),Transform(pos=(12,1))),background=None)
+    ```
 
 - 附加内容 BGM 页面无任何 BGM 信息
-`system/screens.rpy: 1422`
-```python
-# OLD VERSION
-      pos 77+227*(i/10),117+41*(i%10)
-# NEW VERSION
-      pos 77+227*int(i/10),117+41*(i%10)
-```
 
-`system/screens.rpy: 1431`
-```python
-# OLD VERSION
-      pos 77+227*(i/10),117+41*(i%10)
-# NEW VERSION
-      pos 77+227*int(i/10),117+41*(i%10)
-```
+    `system/screens.rpy: 1422`
+    ```python
+    # OLD VERSION
+    pos 77+227*(i/10),117+41*(i%10)
+    # NEW VERSION
+    pos 77+227*int(i/10),117+41*(i%10)
+    ```
+
+    `system/screens.rpy: 1431`
+    ```python
+    # OLD VERSION
+    pos 77+227*(i/10),117+41*(i%10)
+    # NEW VERSION
+    pos 77+227*int(i/10),117+41*(i%10)
+    ```
 
 5. 附加内容 BGM 页面点击 Title 按钮无响应
 我测试了 crosschannel-2.01-windows.linux.mac.zip，它具有相同的问题，源代码 中 Title 按钮所属的按钮组在其他界面也有用到，并且其 onClick action 调用了 MainMenu()，Title 只有在附加内容界面无法触发，猜测是附加内容界面仍然处于主菜单界面。不过该界面同样可以通过 Back 返回主菜单，应该不是一个必须修复的问题。
